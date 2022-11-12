@@ -7,11 +7,6 @@
 #    http://shiny.rstudio.com/
 
 ###added shinythemes package to change layout
-#install.packages("shinythemes")
-#install.packages("fresh")
-#install.packages("xlsx")
-#install.packages("readxl")
-
 library(shiny)
 library(shinythemes)
 library(fresh)
