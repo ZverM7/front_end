@@ -13,6 +13,11 @@ library(shiny)
 library(httr)
 library(dplyr)
 library(jsonlite)
+library(shinythemes)
+library(fresh)
+library(dipsaus)
+library(shinyWidgets)
+
 # sourcing necessary files ----
 source("src/config.R")
 source("src/run_shiny.R")
