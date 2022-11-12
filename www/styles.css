@@ -1,0 +1,53 @@
+/* navbar */
+
+.navbar {
+    background-color: #FFF;
+    -webkit-transition: padding .3s;
+    -moz-transition: padding .3s;
+    transition: padding .3s;
+    border: none;
+}
+
+.navbar .navbar-nav {
+    float: right;
+    padding-right: 5px;
+    padding-top: 50px;
+}
+
+.navbar-default .navbar-nav>li>a {
+  	font-family: 'Open Sans', sans-serif;
+  	font-size: 15px;
+    color: #7AA95C;
+    text-transform: uppercase;
+    background: #FFF;
+    position: relative;
+    display: block;
+    padding: 10px 10px;
+}
+
+.navbar-default .navbar-brand {
+    font-size: 50px;
+    color: #7AA95C;
+}
+
+
+/* hover */
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    color: #555;
+    background-color: #FFF;
+}
+
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+    background-color: rgb(222, 222, 222);
+}
+
+.nav-tabs {
+    padding-top: 50px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    color: #ffffff;
+    background-color: #737373;
+}
+
+
