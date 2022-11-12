@@ -19,6 +19,7 @@ library(dipsaus)
 library(shinyWidgets)
 
 # sourcing necessary files ----
+source("src/config.R")
 source("src/app.R")
 
 # running the front-end ---
