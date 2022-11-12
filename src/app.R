@@ -6,6 +6,8 @@
 #
 #    http://shiny.rstudio.com/
 
+run_shiny_front <- function(external_ip, port){
+
 ###added shinythemes package to change layout
 #install.packages("shinythemes")
 #install.packages("fresh")
@@ -664,5 +666,5 @@ type_drops <- eventReactive(input$btn2,{
 #############################################################################
 # Run the application 
 shinyApp(ui = ui, server = server)
-
+}
 
