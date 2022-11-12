@@ -586,7 +586,7 @@ ui <- fluidPage(
 #############SERVER##########################################################
 
 # Define server logic 
-server <- function(input, output, session, e = "35.228.16.65", p="8080") {
+server <- function(input, output, session, e = external_ip, p=port) {
   
   #Button Homepage to calculator
   pageButtonServer("navbar", parentSession = session)
