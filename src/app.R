@@ -8,6 +8,7 @@
 
 run_shiny_front <- function(external_ip, port){
 
+  options(shiny.host = "0.0.0.0", shiny.port= 8080)
 ###added shinythemes package to change layout
 #install.packages("shinythemes")
 #install.packages("fresh")
