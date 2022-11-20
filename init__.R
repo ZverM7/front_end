@@ -17,6 +17,8 @@ library(shinythemes)
 library(fresh)
 library(dipsaus)
 library(shinyWidgets)
+library(readxl)
+library(shinydashboard)
 
 # sourcing necessary files ----
 source("src/config.R")
