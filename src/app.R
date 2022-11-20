@@ -9,12 +9,17 @@
 run_shiny_front <- function(external_ip, port){
 
   options(shiny.host = "0.0.0.0", shiny.port= 8080)
+
+  
+#############Packages#########################################################
+
 ###added shinythemes package to change layout
 #install.packages("shinythemes")
 #install.packages("fresh")
 #install.packages("xlsx")
 #install.packages("readxl")
-
+#install.packages("httr")
+library(plotly)
 library(jsonlite)
 library(httr)
 library(shiny)
@@ -23,6 +28,9 @@ library(fresh)
 library(dipsaus)
 library(shinyWidgets)
 library(readxl)
+library(shinydashboard)
+
+
 ############Functions#########################################################
 
 #action button to change the page
@@ -31,7 +39,6 @@ pageButtonUi <- function(id) {
                label = 'GO TO CALCULATOR', 
                style="background-color:#7AA95C; color:white")
 }
-
 
 #button function server
 pageButtonServer <- function(id, parentSession) {
@@ -45,8 +52,36 @@ pageButtonServer <- function(id, parentSession) {
   })
 }
 
+#action button to change the page in recommendations for learn more
+pageButtonUi2 <- function(id) {
+  actionButton(NS(id, "page_change2"),
+               label = 'LEARN MORE', 
+               style="background-color:#7AA95C; color:white")
+
+} 
+#button function server for learn more
+pageButtonServer2 <- function(id, parentSession) {
+  moduleServer(id, function(input, output, session) {
+    
+    observeEvent(input$page_change2, {
+      updateNavbarPage(session=parentSession,
+                       inputId="navbar",
+                       selected="Learn more")
+    })
+  })
+}
+
+###Placeholder code for pie charts in learn more:
+#EmissionsChart <- data.frame("Categorie"=rownames(EmissionsChart), EmissionsChart)
+#data <- EmissionsChart[,c('Categorie', 'X1960')]
+
+#fig1 <- plot_ly(data, labels = ~Categorie, values = ~X1960, type = 'pie')
+#fig1 <- fig %>% layout(title = 'CO2 Emissions by Variety',
+                      # xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                      # yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 
 
+                       
 
 ###########UI#############################################################
 
@@ -67,7 +102,7 @@ ui <- fluidPage(
                                   position = "static-top",
                                   theme = "styles.css",
                                   fluid = T,
-                      #Home page            
+                      #Home page              ##############################################################           
                               tabPanel("Home",
                                       fixedRow(
                                           column(width= 6,
@@ -83,9 +118,9 @@ ui <- fluidPage(
                                                 ),
                                         
                                         #Button to calculater page
-                                            pageButtonUi("navbar"),
+                                            div(pageButtonUi("navbar"),
+                                                style = "padding-left: 50%; padding-top: 40px"),
                                           
-                                         
                                         ),
                                         
                                         #Picture on the side
@@ -102,300 +137,138 @@ ui <- fluidPage(
                                             )
                                       ),
                       
-                        #Calculator page
+                        #Calculator page              ############################################################## 
                                   tabPanel("Calculator", 
                                            fluidRow(
                                              tags$head(
                                                tags$style("label{font-size:10px;height:10px;}")
                                              ),
                                              #tags$style("[type = 'text'] {font-size:10px;height:20px;}"),
+                                             
+                                             # input 
                                              column(width = 6,
                                                     h2("Type your ingredients here.",
                                                        style="padding-top:50px;"
                                                        ),
                                                     
-                                                    column(width = 4, 
-                                                           pickerInput(inputId = "textin", 
-                                                                       label = "Ingredients", 
-                                                                       choices = c("mushrooms", "corn", "tomato", "beans", "peas", "chickpeas", 
-                                                                                   "lentils", "pineapple", "apricot", "peach", "basil", "rosemary", 
-                                                                                   "thyme", "dates", "tea", "oregano", "lentils", "dates", "spices", 
-                                                                                   "basil", "oregano", "beetroot", "dates", "crab", "crayfish", 
-                                                                                   "langostino", "prawns", "scampi", "shrimps", "brussel sprouts", 
-                                                                                   "strawberries", "blueberries", "raspberries", "french fries", 
-                                                                                   "beetroot", "red cabbage", "kale", "black-eyed beans", "plum", 
-                                                                                   "burger bun", "anise", "baking powder", "baking soda", "lemon balm", 
-                                                                                   "balsamic vinegar", "bbq sauce", "bay leaves", "cardamom", "chervil", 
-                                                                                   "chia seeds", "chili", "cinnamon", "clove", "cilantro", "cumin", 
-                                                                                   "turmeric", "curry", "dill", "fish sauce", "gelatin", "ginger", 
-                                                                                   "herbs", "ketchup", "lemon grass", "macadamia nuts", "marjoram", 
-                                                                                   "mayonnaise", "caraway", "mustard", "mustard seeds", "mustard leaves", 
-                                                                                   "nutmeg", "sesame oil", "onion powder", "paprika", "parsley", 
-                                                                                   "pecans", "pepper", "pine nuts", "poppy seed", "saffron", "sage", 
-                                                                                   "salt", "sea salt", "sesame", "soy sauce", "agave syrup", "tabasco sauce", 
-                                                                                   "tarragon", "tomatoes paste", "vanilin", "vanilla extract", "apple vinegar", 
-                                                                                   "white wine vinegar", "wasabi", "yeast extract", "yeast", "beer", 
-                                                                                   "brandy", "cognac", "liquor", "tawny port", "red wine", "white wine", 
-                                                                                   "wine", "half-fat margarine", "extravirgin olive oil", "olive oil", 
-                                                                                   "sunflower oil", "vegan spreadable fat", "full-fat margarine", 
-                                                                                   "clams", "cockles", "mussels", "oysters", "scallops", "egg", 
-                                                                                   "sausage", "hot dog", "mushrooms", "morel mushrooms", "porcini mushrooms", 
-                                                                                   "portobello mushrooms", "shiitake mushrooms", "wild mushrooms", 
-                                                                                   "lamb's lettuce", "collard green", "kale", "cherry tomatoes", 
-                                                                                   "kohlrabi", "acorn squash", "banana squash", "butternut squash", 
-                                                                                   "delicata squash", "gem squash", "hubbard squash", "pumpkin", 
-                                                                                   "spaghetti squash", "chives", "leek", "brussel sprouts", "arugula", 
-                                                                                   "mixed salad", "sweet potato", "savoy", "wholegrain bread bun", 
-                                                                                   "wheat bread bun", "bulgur", "couscous", "millet", "crispbread", 
-                                                                                   "egg noodles", "lasagna noodles", "linguine", "pasta", "wholewheat noodles", 
-                                                                                   "toast", "wholegrain toast", "wholegrain bread", "bread baguette", 
-                                                                                   "wheat bread", "all-purpose flour", "panko", "wholewheat flour", 
-                                                                                   "walnuts", "brown lentils", "green lentils", "lentils", "cream cheese", 
-                                                                                   "philadelphia cream cheese", "ricotta", "low-fat curd cheese", 
-                                                                                   "mozzarella", "curd cheese", "whipping cream", "schmand", "blackberries", 
-                                                                                   "fig", "grapefruit", "blueberries", "raspberries", "cherries", 
-                                                                                   "honeyberries", "jabuticabas", "surinam cherries", "mango", "passion fruit", 
-                                                                                   "ackee", "damson", "jambul", "japanese plum", "gooseberries", 
-                                                                                   "watermelon", "icing sugar", "vegetable stock", "honey", "chicken broth", 
-                                                                                   "coconut milk", "beef broth", "pea veggie burger", "soy veggie burger", 
-                                                                                   "peanut butter", "pastry", "puff pastry", "veggie nugget", "veggie patty", 
-                                                                                   "gnocchi", "chicken nuggets", "chicken cold cuts", "coffee powder", 
-                                                                                   "cocoa powder", "cheese emmentaler", "parmesan", "lupin flour", 
-                                                                                   "spelt drink", "oats drink", "almond drink", "mineral water", 
-                                                                                   "soy curd", "beef mince", "apple juice", "orange juice", "dark chocolate", 
-                                                                                   "milk chocolade", "white chocolate", "tempeh", "venison", "vegan sausage", 
-                                                                                   "thuringian sausage", "beef cold cuts", "ham", "bacon", "cashew nuts", 
-                                                                                   "chestnuts", "hazelnuts", "pistachios", "artichoke", "jerusalem artichoke", 
-                                                                                   "chicory", "endive", "cheddar cheese", "quinoa", "almonds", "apple", 
-                                                                                   "crab apple", "fuji apple", "apricot", "eggplant", "avocado", 
-                                                                                   "banana", "barley", "pearl barley", "barley", "barley", "broccoli", 
-                                                                                   "butter", "buttermilk", "red cabbage", "bok choy", "white cabbage", 
-                                                                                   "baby carrot", "carrot", "beef", "cauliflower", "celeriac", "celery", 
-                                                                                   "cheese", "chicken", "cocoa beans", "coconut oil", "coconut", 
-                                                                                   "coffee", "coffee beans", "cottonseed oil", "full cream milk", 
-                                                                                   "milk", "cream", "sour cream", "cucumber", "beans", "black beans", 
-                                                                                   "borlotti beans", "broad beans", "fava beans", "green beans", 
-                                                                                   "kidney beans", "mung beans", "navy beans", "pinto beans", "runner beans", 
-                                                                                   "beans", "black beans", "borlotti beans", "broad beans", "fava beans", 
-                                                                                   "green beans", "kidney beans", "mung beans", "navy beans", "pinto beans", 
-                                                                                   "runner beans", "fennel", "fish oil", "barracuda", "basa", "bass", 
-                                                                                   "black cod", "blowfish", "brill", "butter fish", "catfish", "cod", 
-                                                                                   "dorade", "flounder", "grouper", "haddock", "halibut", "lingcod", 
-                                                                                   "monkfish", "mullet", "patagonian toothfish", "perch", "pike", 
-                                                                                   "pollock", "salmon", "sanddab", "sea bass", "shad", "skate", 
-                                                                                   "sole", "sturgeon", "tilefish", "turbot", "whitebait", "whitefish", 
-                                                                                   "whiting", "anchovy", "hake", "tuna", "bluefish", "bombay duck", 
-                                                                                   "bream", "dogfish", "herring", "john dory", "mackerel", "mahi mahi", 
-                                                                                   "orange roughy", "pomfret", "pompano", "sardine", "sprat", "swordfish", 
-                                                                                   "grapes", "green asparagus", "bell pepper", "green bell pepper", 
-                                                                                   "habanero", "jalapeno", "okra", "red bell pepper", "red chilli", 
-                                                                                   "yellow bell pepper", "iceberg lettuce", "kiwi", "lemon", "lemon juice", 
-                                                                                   "lemon zest", "lime", "bibb lettuce", "lettuce", "linseed", "baby corn", 
-                                                                                   "corn", "corn", "corn", "corn kernel", "corn kernel", "corn kernel", 
-                                                                                   "cornstarch", "clementine", "mandarine", "tangerine", "bitter melon", 
-                                                                                   "cantaloupe", "honeydew", "melon", "catnip", "mint", "peppermint", 
-                                                                                   "spearmint", "oats", "green olives", "kalamata olives", "olives", 
-                                                                                   "garlic", "green onion", "onion", "red onion", "scallion", "shallot", 
-                                                                                   "spring onion", "blood orange", "kumquat", "orange", "orange peel", 
-                                                                                   "palm fruit", "palm kernel oil", "palm oil", "papaya", "paris market carrot", 
-                                                                                   "nectarine", "peach", "peanuts", "pear", "pineapple", "potato", 
-                                                                                   "russet  potato", "potato starch", "potato", "russet  potato", 
-                                                                                   "potato", "russet  potato", "baby peas", "chickpeas", "peas", 
-                                                                                   "split peas", "sugar snap peas", "peas", "split peas", "sugar snap peas", 
-                                                                                   "peas", "split peas", "sugar snap peas", "horseradish", "radish", 
-                                                                                   "white radish", "rape oil", "red meat", "basmati rice", "brown rice", 
-                                                                                   "rice", "wild rice", "rye", "rye", "rye", "lamb", "skimmed milk", 
-                                                                                   "soybeans", "soybean drink", "soybean oil", "soybeans", "soybeans", 
-                                                                                   "baby spinach", "new zealand spinach", "spinach", "blackcurrants", 
-                                                                                   "boysenberries", "cloudberries", "cranberries", "currants", "elderberries", 
-                                                                                   "goji berries", "jostaberries", "juniper berries", "marionberries", 
-                                                                                   "miracle fruit", "mulberries", "pineberries", "redcurrants", 
-                                                                                   "salal berries", "salmonberries", "strawberries", "wheat berries", 
-                                                                                   "white currants", "brown sugar", "granulated sugar", "sugar", 
-                                                                                   "sunflower seeds", "sunflower seeds", "sweetcorn", "sweet sorghum grain", 
-                                                                                   "sweet sorghum stem", "pork", "ice", "tap water", "tilapia", 
-                                                                                   "tofu", "tomato", "trout", "vanilla", "whey", "white asparagus", 
-                                                                                   "yogurt", "zucchini"), 
-                                                                       selected = "choose", 
-                                                                       options = list(`live-search` = TRUE)),
-                                                           verbatimTextOutput("Ing"),
-                                                           textInput("textin2", "", 
-                                                                     placeholder = "e.g. carrots", 
-                                                                     width = "100%"),
-                                                           textOutput("Ing2"), 
-                                                           textInput("textin3", "", 
-                                                                     placeholder = "e.g. carrots", 
-                                                                     width = "100%"),
-                                                           textOutput("Ing3"),
-                                                           textInput("textin4", "", 
-                                                                     placeholder = "e.g. carrots", 
-                                                                     width = "100%"),
-                                                           textOutput("Ing4"),
-                                                           textInput("textin5", "", 
-                                                                     placeholder = "e.g. carrots", 
-                                                                     width = "100%"),
-                                                           textOutput("Ing5"),
-                                                           
-                                                           #add button
-                                                           
-                                            
-                                                           actionButton("add_btn", "Add Textbox")
+                                                    div(
+                                                      style = "display: grid; 
+                                                      grid-template-columns: 30% repeat(3, 30%); 
+                                                      grid-gap: 10px;",
+                                                      
+                                                      pickerInput(inputId = "textin", 
+                                                                  label = "Ingredients", 
+                                                                  choices = c("ingredient", "ackee", "acorn squash", "agave syrup", "all-purpose flour", "almond drink", "almonds", "anchovy", "anise", "apple", "apple juice", "apple vinegar", "apricot", "apricot", "artichoke", "arugula",  "avocado", "baby carrot", "baby corn", "baby peas", "baby spinach",  "bacon", "baking powder", "baking soda", "balsamic vinegar",  "banana", "banana squash", "barley", "barley", "barley", "barracuda",  "basa", "basil", "basil", "basmati rice", "bass", "bay leaves",  "bbq sauce", "beans", "beans", "beans", "beef", "beef broth", "beef cold cuts", "beef mince", "beer", "beetroot", "beetroot", "bell pepper", "bibb lettuce", "bitter melon", "black beans", "black beans", "black cod", "black-eyed beans", "blackberries", "blackcurrants", "blood orange", "blowfish", "blueberries", "blueberries",  "bluefish", "bok choy", "bombay duck", "borlotti beans", "borlotti beans", "boysenberries", "brandy", "bread baguette", "bream", "brill",  "broad beans", "broad beans", "broccoli", "brown lentils", "brown rice", "brown sugar", "brussel sprouts", "brussel sprouts", "bulgur", "burger bun", "butter", "butter fish", "buttermilk", "butternut squash", "cantaloupe", "caraway", "cardamom", "carrot", "cashew nuts", "catfish", "catnip", "cauliflower", "celeriac", "celery", "cheddar cheese", "cheese", "cheese emmentaler", "cherries", "cherry tomatoes", "chervil", "chestnuts", "chia seeds", "chicken", "chicken broth", "chicken cold cuts", "chicken nuggets", "chickpeas", "chickpeas", "chicory", "chili", "chives", "cilantro", "cinnamon", "clams",  "clementine", "cloudberries", "clove", "cockles", "cocoa beans", "cocoa powder", "coconut", "coconut milk", "coconut oil", "cod", "coffee", "coffee beans", "coffee powder", "cognac", "collard green", "corn", "corn", "corn", "corn", "corn kernel", "corn kernel", "corn kernel", "cornstarch", "cottonseed oil", "couscous", "crab", "crab apple", "cranberries", "crayfish", "cream", "cream cheese", "crispbread", "cucumber", "cumin", "curd cheese", "currants", "curry", "damson", "dark chocolate", "dates", "dates", "dates", "delicata squash", "dill", "dogfish", "dorade", "egg", "egg noodles",  "eggplant", "elderberries", "endive", "extravirgin olive oil", "fava beans", "fava beans", "fennel", "fig", "fish oil", "fish sauce",  "flounder", "french fries", "fuji apple", "full cream milk",  "full-fat margarine", "garlic", "gelatin", "gem squash", "ginger", "gnocchi", "goji berries", "gooseberries", "granulated sugar", "grapefruit", "grapes", "green asparagus", "green beans", "green beans", "green bell pepper", "green lentils", "green olives", "green onion", "grouper", "habanero", "haddock", "hake", "half-fat margarine",  "halibut", "ham", "hazelnuts", "herbs", "herring", "honey", "honeyberries", "honeydew", "horseradish", "hot dog", "hubbard squash", "ice","iceberg lettuce", "icing sugar", "jabuticabas", "jalapeno",  "jambul", "japanese plum", "jerusalem artichoke", "john dory", "jostaberries", "juniper berries", "kalamata olives", "kale", "kale", "ketchup", "kidney beans", "kidney beans", "kiwi", "kohlrabi","kumquat", "lamb", "lamb's lettuce", "langostino", "lasagna noodles", "leek", "lemon", "lemon balm", "lemon grass", "lemon juice","lemon zest", "lentils", "lentils", "lentils", "lettuce", "lime", "lingcod", "linguine", "linseed", "liquor", "low-fat curd cheese", "lupin flour", "macadamia nuts", "mackerel", "mahi mahi", "mandarine", "mango", "marionberries", "marjoram", "mayonnaise", "melon",  "milk", "milk chocolade", "millet", "mineral water", "mint", "miracle fruit", "mixed salad", "monkfish", "morel mushrooms",  "mozzarella", "mulberries", "mullet", "mung beans", "mung beans", "mushrooms", "mushrooms", "mussels", "mustard", "mustard leaves", "mustard seeds", "navy beans", "navy beans", "nectarine", "nutmeg", "oats", "oats drink", "okra", "olive oil", "olives", "onion", "onion powder", "orange", "orange juice", "orange peel",  "orange roughy", "oregano", "oregano", "oysters", "palm fruit",  "palm kernel oil", "palm oil", "panko", "papaya", "paprika",   "paris market carrot", "parmesan", "parsley", "passion fruit", "pasta", "pastry", "patagonian toothfish", "pea veggie burger", "peach", "peach", "peanut butter", "peanuts", "pear", "pearl barley",  "peas", "peas", "peas", "peas", "pecans", "pepper", "peppermint",  "perch", "philadelphia cream cheese", "pike", "pine nuts", "pineapple", "pineapple", "pineberries", "pinto beans", "pinto beans", "pistachios", "plum", "pollock", "pomfret", "pompano", "poppy seed", "porcini mushrooms", "pork", "portobello mushrooms", "potato", "potato", "potato",  "potato starch", "prawns", "puff pastry", "pumpkin", "quinoa",  "radish", "rape oil", "raspberries", "raspberries", "red bell pepper", "red cabbage", "red cabbage", "red chilli", "red meat", "red onion",  "red wine", "redcurrants", "rice", "ricotta", "rosemary", "runner beans",  "runner beans", "russet  potato", "russet  potato", "russet  potato", "rye", "rye", "rye", "saffron", "sage", "salal berries", "salmon",  "salmonberries", "salt", "sanddab", "sardine", "sausage", "savoy", "scallion", "scallops", "scampi", "schmand", "sea bass", "sea salt",  "sesame", "sesame oil", "shad", "shallot", "shiitake mushrooms", "shrimps", "skate", "skimmed milk", "sole", "sour cream", "soy curd",  "soy sauce", "soy veggie burger", "soybean drink", "soybean oil", "soybeans", "soybeans", "soybeans", "spaghetti squash", "spearmint",  "spelt drink", "spices", "spinach", "split peas", "split peas", "split peas", "sprat", "spring onion", "strawberries", "strawberries", "sturgeon", "sugar", "sugar snap peas", "sugar snap peas", "sugar snap peas", "sunflower oil", "sunflower seeds", "sunflower seeds", "surinam cherries","sweet potato", "sweet sorghum grain", "sweet sorghum stem",  "sweetcorn", "swordfish", "tabasco sauce", "tangerine", "tap water", "tarragon", "tawny port", "tea", "tempeh", "thuringian sausage", "thyme", "tilapia", "tilefish", "toast", "tofu", "tomato", "tomato", "tomatoes paste", "trout", "tuna", "turbot", "turmeric", "vanilin",  "vanilla", "vanilla extract", "vegan sausage", "vegan spreadable fat", "vegetable stock", "veggie nugget", "veggie patty", "venison", "walnuts", "wasabi", "watermelon", "wheat berries", "wheat bread", "wheat bread bun", "whey", "whipping cream", "white asparagus",  "white cabbage", "white chocolate", "white currants", "white radish", "white wine", "white wine vinegar", "whitebait", "whitefish",  "whiting", "wholegrain bread", "wholegrain bread bun", "wholegrain toast", "wholewheat flour", "wholewheat noodles", "wild mushrooms", "wild rice", "wine", "yeast", "yeast extract", "yellow bell pepper", "yogurt", "zucchini"), 
+                                                                  selected = "choice", 
+                                                                  options = list(`live-search` = TRUE)),
+                                                      
+                                                      textInput("quantityin", "Quantity", 
+                                                                placeholder = "e.g. 200" ),
+                                                      
+                                                      pickerInput(inputId = "unitin", 
+                                                                  label = "Unit", 
+                                                                  choices = c("#", "bottle", "bunch", "bunches", "c", "can", "cans", "carton", "cartons", "cc", "centimeter", "centimeters", "centimetre", "centimetres", "chunk", "chunks", "cl", "cm", "cms", "cube", "cup", "cups", "dash", "dashes", "dc", "deci", "deciliter", "deciliters", "dl", "drop", "drops", "fl oz", "fl pt", "fl qt", "fluid ounce", "g",  "gal", "gallon", "gallons", "gill", "gram", "grams", "gs", "head", "inch", "inches", "jar", "jars", "jigger", "k", "kg", "kgs", "kilo", "kilogram", "kilogramme", "kilogrammes", "kilograms",  "kilos", "knob", "l", "lb", "lbs", "leaf", "leaves", "liter", "liters", "litre", "litres", "lts", "mg", "mgs", "milligram", "milligramme", "milligrammes", "milliliter", "milliliters", "millilitre", "millimeter", "millimeters", "millimetre", "millimetres", "ml",  "mls", "mm", "ounce", "ounces", "oz", "p", "package", "packages",  "packet", "packets", "piece", "pieces", "pinch", "pinches", "pint",  "pints", "pkt", "pod", "pods", "portion", "portions", "pound",  "pounds", "pt", "q", "qt", "quart", "sachet", "sachets", "scoop",  "scoops", "sheet", "sheets", "sized", "slice", "slices", "sprig", "sprigs", "stalk", "stalks", "stick", "sticks", "strip", "strips",  "t", "tablespoon", "tablespoons", "tbl", "tbs", "tbsp", "teaspoon", "teaspoons", "tin", "tsp", "wedge", "wedges"), 
+                                                                  selected = "choose", 
+                                                                  options = list(`live-search` = TRUE))
+                                                      ),
+                                                      
+                                                    div(
+                                                      style = "display: grid; 
+                                                      grid-template-columns: 30% repeat(3, 30%); 
+                                                      grid-gap: 10px;",
+                                                      pickerInput(inputId = "textin2",  
+                                                                  choices = c("ingredient", "ackee", "acorn squash", "agave syrup", "all-purpose flour", "almond drink", "almonds", "anchovy", "anise", "apple", "apple juice", "apple vinegar", "apricot", "apricot", "artichoke", "arugula",  "avocado", "baby carrot", "baby corn", "baby peas", "baby spinach",  "bacon", "baking powder", "baking soda", "balsamic vinegar",  "banana", "banana squash", "barley", "barley", "barley", "barracuda",  "basa", "basil", "basil", "basmati rice", "bass", "bay leaves",  "bbq sauce", "beans", "beans", "beans", "beef", "beef broth", "beef cold cuts", "beef mince", "beer", "beetroot", "beetroot", "bell pepper", "bibb lettuce", "bitter melon", "black beans", "black beans", "black cod", "black-eyed beans", "blackberries", "blackcurrants", "blood orange", "blowfish", "blueberries", "blueberries",  "bluefish", "bok choy", "bombay duck", "borlotti beans", "borlotti beans", "boysenberries", "brandy", "bread baguette", "bream", "brill",  "broad beans", "broad beans", "broccoli", "brown lentils", "brown rice", "brown sugar", "brussel sprouts", "brussel sprouts", "bulgur", "burger bun", "butter", "butter fish", "buttermilk", "butternut squash", "cantaloupe", "caraway", "cardamom", "carrot", "cashew nuts", "catfish", "catnip", "cauliflower", "celeriac", "celery", "cheddar cheese", "cheese", "cheese emmentaler", "cherries", "cherry tomatoes", "chervil", "chestnuts", "chia seeds", "chicken", "chicken broth", "chicken cold cuts", "chicken nuggets", "chickpeas", "chickpeas", "chicory", "chili", "chives", "cilantro", "cinnamon", "clams",  "clementine", "cloudberries", "clove", "cockles", "cocoa beans", "cocoa powder", "coconut", "coconut milk", "coconut oil", "cod", "coffee", "coffee beans", "coffee powder", "cognac", "collard green", "corn", "corn", "corn", "corn", "corn kernel", "corn kernel", "corn kernel", "cornstarch", "cottonseed oil", "couscous", "crab", "crab apple", "cranberries", "crayfish", "cream", "cream cheese", "crispbread", "cucumber", "cumin", "curd cheese", "currants", "curry", "damson", "dark chocolate", "dates", "dates", "dates", "delicata squash", "dill", "dogfish", "dorade", "egg", "egg noodles",  "eggplant", "elderberries", "endive", "extravirgin olive oil", "fava beans", "fava beans", "fennel", "fig", "fish oil", "fish sauce",  "flounder", "french fries", "fuji apple", "full cream milk",  "full-fat margarine", "garlic", "gelatin", "gem squash", "ginger", "gnocchi", "goji berries", "gooseberries", "granulated sugar", "grapefruit", "grapes", "green asparagus", "green beans", "green beans", "green bell pepper", "green lentils", "green olives", "green onion", "grouper", "habanero", "haddock", "hake", "half-fat margarine",  "halibut", "ham", "hazelnuts", "herbs", "herring", "honey", "honeyberries", "honeydew", "horseradish", "hot dog", "hubbard squash", "ice","iceberg lettuce", "icing sugar", "jabuticabas", "jalapeno",  "jambul", "japanese plum", "jerusalem artichoke", "john dory", "jostaberries", "juniper berries", "kalamata olives", "kale", "kale", "ketchup", "kidney beans", "kidney beans", "kiwi", "kohlrabi","kumquat", "lamb", "lamb's lettuce", "langostino", "lasagna noodles", "leek", "lemon", "lemon balm", "lemon grass", "lemon juice","lemon zest", "lentils", "lentils", "lentils", "lettuce", "lime", "lingcod", "linguine", "linseed", "liquor", "low-fat curd cheese", "lupin flour", "macadamia nuts", "mackerel", "mahi mahi", "mandarine", "mango", "marionberries", "marjoram", "mayonnaise", "melon",  "milk", "milk chocolade", "millet", "mineral water", "mint", "miracle fruit", "mixed salad", "monkfish", "morel mushrooms",  "mozzarella", "mulberries", "mullet", "mung beans", "mung beans", "mushrooms", "mushrooms", "mussels", "mustard", "mustard leaves", "mustard seeds", "navy beans", "navy beans", "nectarine", "nutmeg", "oats", "oats drink", "okra", "olive oil", "olives", "onion", "onion powder", "orange", "orange juice", "orange peel",  "orange roughy", "oregano", "oregano", "oysters", "palm fruit",  "palm kernel oil", "palm oil", "panko", "papaya", "paprika",   "paris market carrot", "parmesan", "parsley", "passion fruit", "pasta", "pastry", "patagonian toothfish", "pea veggie burger", "peach", "peach", "peanut butter", "peanuts", "pear", "pearl barley",  "peas", "peas", "peas", "peas", "pecans", "pepper", "peppermint",  "perch", "philadelphia cream cheese", "pike", "pine nuts", "pineapple", "pineapple", "pineberries", "pinto beans", "pinto beans", "pistachios", "plum", "pollock", "pomfret", "pompano", "poppy seed", "porcini mushrooms", "pork", "portobello mushrooms", "potato", "potato", "potato",  "potato starch", "prawns", "puff pastry", "pumpkin", "quinoa",  "radish", "rape oil", "raspberries", "raspberries", "red bell pepper", "red cabbage", "red cabbage", "red chilli", "red meat", "red onion",  "red wine", "redcurrants", "rice", "ricotta", "rosemary", "runner beans",  "runner beans", "russet  potato", "russet  potato", "russet  potato", "rye", "rye", "rye", "saffron", "sage", "salal berries", "salmon",  "salmonberries", "salt", "sanddab", "sardine", "sausage", "savoy", "scallion", "scallops", "scampi", "schmand", "sea bass", "sea salt",  "sesame", "sesame oil", "shad", "shallot", "shiitake mushrooms", "shrimps", "skate", "skimmed milk", "sole", "sour cream", "soy curd",  "soy sauce", "soy veggie burger", "soybean drink", "soybean oil", "soybeans", "soybeans", "soybeans", "spaghetti squash", "spearmint",  "spelt drink", "spices", "spinach", "split peas", "split peas", "split peas", "sprat", "spring onion", "strawberries", "strawberries", "sturgeon", "sugar", "sugar snap peas", "sugar snap peas", "sugar snap peas", "sunflower oil", "sunflower seeds", "sunflower seeds", "surinam cherries","sweet potato", "sweet sorghum grain", "sweet sorghum stem",  "sweetcorn", "swordfish", "tabasco sauce", "tangerine", "tap water", "tarragon", "tawny port", "tea", "tempeh", "thuringian sausage", "thyme", "tilapia", "tilefish", "toast", "tofu", "tomato", "tomato", "tomatoes paste", "trout", "tuna", "turbot", "turmeric", "vanilin",  "vanilla", "vanilla extract", "vegan sausage", "vegan spreadable fat", "vegetable stock", "veggie nugget", "veggie patty", "venison", "walnuts", "wasabi", "watermelon", "wheat berries", "wheat bread", "wheat bread bun", "whey", "whipping cream", "white asparagus",  "white cabbage", "white chocolate", "white currants", "white radish", "white wine", "white wine vinegar", "whitebait", "whitefish",  "whiting", "wholegrain bread", "wholegrain bread bun", "wholegrain toast", "wholewheat flour", "wholewheat noodles", "wild mushrooms", "wild rice", "wine", "yeast", "yeast extract", "yellow bell pepper", "yogurt", "zucchini"), 
+                                                                  selected = "choice", 
+                                                                  options = list(`live-search` = TRUE)),
+                                                      
+                                                      textInput("quantityin2",NULL, 
+                                                                placeholder = "e.g. 200" ),
+                                                      
+                                                      pickerInput(inputId = "unitin2",  
+                                                                  choices = c("#", "bottle", "bunch", "bunches", "c", "can", "cans", "carton", "cartons", "cc", "centimeter", "centimeters", "centimetre", "centimetres", "chunk", "chunks", "cl", "cm", "cms", "cube", "cup", "cups", "dash", "dashes", "dc", "deci", "deciliter", "deciliters", "dl", "drop", "drops", "fl oz", "fl pt", "fl qt", "fluid ounce", "g",  "gal", "gallon", "gallons", "gill", "gram", "grams", "gs", "head", "inch", "inches", "jar", "jars", "jigger", "k", "kg", "kgs", "kilo", "kilogram", "kilogramme", "kilogrammes", "kilograms",  "kilos", "knob", "l", "lb", "lbs", "leaf", "leaves", "liter", "liters", "litre", "litres", "lts", "mg", "mgs", "milligram", "milligramme", "milligrammes", "milliliter", "milliliters", "millilitre", "millimeter", "millimeters", "millimetre", "millimetres", "ml",  "mls", "mm", "ounce", "ounces", "oz", "p", "package", "packages",  "packet", "packets", "piece", "pieces", "pinch", "pinches", "pint",  "pints", "pkt", "pod", "pods", "portion", "portions", "pound",  "pounds", "pt", "q", "qt", "quart", "sachet", "sachets", "scoop",  "scoops", "sheet", "sheets", "sized", "slice", "slices", "sprig", "sprigs", "stalk", "stalks", "stick", "sticks", "strip", "strips",  "t", "tablespoon", "tablespoons", "tbl", "tbs", "tbsp", "teaspoon", "teaspoons", "tin", "tsp", "wedge", "wedges"), 
+                                                                  selected = "choose", 
+                                                                  options = list(`live-search` = TRUE)),
                                                     ),
-                                                    column(width = 4,
-                                                           textInput("quantityin", "Quantity", 
-                                                                     placeholder = "e.g. 200", 
-                                                                     width = "100%"),
-                                                           textOutput("Qua"),
-                                                           textInput("quantityin2", "", 
-                                                                     placeholder = "e.g. 200",
-                                                                     width = "100%"),
-                                                           textOutput("Qua2"),
-                                                           textInput("quantityin3", "", 
-                                                                     placeholder = "e.g. 200", 
-                                                                     width = "100%"),
-                                                           textOutput("Qua3"),
-                                                           textInput("quantityin4", "", 
-                                                                     placeholder = "e.g. 200", 
-                                                                     width = "100%"),
-                                                           textOutput("Qua4"),
-                                                           textInput("quantityin5", "", 
-                                                                     placeholder = "e.g. 200", 
-                                                                     width = "100%"),
-                                                           textOutput("Qua5"),
-                                                    ),
-                                                    column(width = 4,
-                                                
-                                                           pickerInput(inputId = "unitin", 
-                                                                    label = "Unit", 
-                                                                    choices = c("inch", "inches", "millimeter", "millimeters", "millimetre", 
-                                                                                "millimetres", "mm", "#", "g", "gram", "grams", "gs", "kg", "kgs", 
-                                                                                "kilo", "kilogram", "kilogramme", "kilogrammes", "kilograms", 
-                                                                                "kilos", "lb", "mg", "mgs", "milligram", "milligramme", "milligrammes", 
-                                                                                "ounce", "ounces", "oz", "pound", "pounds", "centimeter", "centimeters", 
-                                                                                "centimetre", "centimetres", "cm", "cms", "c", "cc", "cl", "cup", 
-                                                                                "cups", "dash", "dc", "deci", "deciliter", "deciliters", "dl", 
-                                                                                "fl oz", "fl pt", "fl qt", "fluid ounce", "gal", "gallon", "gallons", 
-                                                                                "gill", "jigger", "liter", "liters", "ml", "p", "pinch", "pinches", 
-                                                                                "pint", "pints", "pt", "q", "qt", "t", "tablespoon", "tablespoons", 
-                                                                                "tbl", "tbs", "tbsp", "teaspoon", "teaspoons", "tsp", "bunch", 
-                                                                                "bunches", "can", "chunk", "chunks", "head", "k", "leaf", "leaves", 
-                                                                                "sheet", "sheets", "slice", "slices", "sprig", "sprigs", "stalk", 
-                                                                                "stalks", "strip", "strips", "wedge", "wedges", "milliliter", 
-                                                                                "millilitre", "milliliters", "quart", "dashes", "tin", "bottle", 
-                                                                                "pieces", "piece", "sachet", "sachets", "scoops", "scoop", "packet", 
-                                                                                "packets", "pkt", "mls", "carton", "cartons", "pod", "sized", 
-                                                                                "lbs", "cans", "lts", "package", "packages", "litres", "litre", 
-                                                                                "sticks", "stick", "pods", "portion", "portions", "drop", "drops", 
-                                                                                "knob", "jar", "jars", "cube", "l"), 
-                                                                    selected = "choose", 
-                                                                    options = list(`live-search` = TRUE)),
-                                                           verbatimTextOutput("Uni"),
-                                                           textInput("unitin2", "", 
-                                                                     placeholder = "e.g. gr", 
-                                                                     width = "100%"),
-                                                           textOutput("Uni2"),
-                                                           textInput("unitin3", "", 
-                                                                     placeholder = "e.g. gr", 
-                                                                     width = "100%"),
-                                                           textOutput("Uni3"),
-                                                           textInput("unitin4", "", 
-                                                                     placeholder = "e.g. gr", 
-                                                                     width = "100%"),
-                                                           textOutput("Uni4"),
-                                                           textInput("unitin5", "", 
-                                                                     placeholder = "e.g. gr", 
-                                                                     width = "100%"),
-                                                           textOutput("Uni5"),
-                                                    ),
-                                                    #column(width = 2,
-                                                           #pickerInput(inputId = "varietyin", 
-                                                                       #label = "Variety", 
-                                                                       #choices = c("canned","frozen", "fresh", "dry", "glass"), 
-                                                                       #selected = "choose", 
-                                                                       #options = list(`live-search` = TRUE)),
-                                                           #verbatimTextOutput("Var"),
-                                                           #pickerInput(inputId = "varietyin", 
-                                                                      #label = "", 
-                                                                      #choices = c("canned","frozen", "fresh", "dry", "glass"), 
-                                                                      #selected = "choose", 
-                                                                      #options = list(`live-search` = TRUE)),
-                                                           #pickerInput(inputId = "varietyin", 
-                                                                      #label = "", 
-                                                                      #choices = c("canned","frozen", "fresh", "dry", "glass"), 
-                                                                      #selected = "choose", 
-                                                                      #options = list(`live-search` = TRUE)),
-                                                          # pickerInput(inputId = "varietyin", 
-                                                                      #label = "", 
-                                                                      #choices = c("canned","frozen", "fresh", "dry", "glass"), 
-                                                                      #selected = "choose", 
-                                                                      #options = list(`live-search` = TRUE)),
-                                                           #pickerInput(inputId = "varietyin", 
-                                                                      #label = "", 
-                                                                      #choices = c("canned","frozen", "fresh", "dry", "glass"), 
-                                                                      #selected = "choose", 
-                                                                      #options = list(`live-search` = TRUE))
-                                          
-                                                    #),
-                                                    #column(width = 2,
-                                                           #pickerInput(inputId = "certificationin", 
-                                                                      #label = "Certification", 
-                                                                      #choices = c("organic","conventional", 
-                                                                      #             "swiss integrated production"), 
-                                                                      #selected = "choose", 
-                                                                      #options = list(`live-search` = TRUE)),
-                                                           #pickerInput(inputId = "certificationin", 
-                                                                      #label = "", 
-                                                                      #choices = c("organic","conventional", 
-                                                                      #             "swiss integrated production"), 
-                                                                      #selected = "choose", 
-                                                                      #options = list(`live-search` = TRUE)),
-                                                           #pickerInput(inputId = "certificationin", 
-                                                                      #label = "", 
-                                                                      #choices = c("organic","conventional", 
-                                                                      #             "swiss integrated production"), 
-                                                                      #selected = "choose", 
-                                                                      #options = list(`live-search` = TRUE)),
-                                                         #  pickerInput(inputId = "certificationin", 
-                                                                      #label = "", 
-                                                                      #choices = c("organic","conventional", 
-                                                                      #             "swiss integrated production"), 
-                                                                      #selected = "choose", 
-                                                                      #options = list(`live-search` = TRUE)),
-                                                           #pickerInput(inputId = "certificationin", 
-                                                                      #label = "", 
-                                                                      #choices = c("organic","conventional", 
-                                                                      #             "swiss integrated production"), 
-                                                                      #selected = "choose", 
-                                                                      #options = list(`live-search` = TRUE)),
-                                                           
-                                                           actionButton('btn2',"CALCULATE", style="color:white; background-color:#7AA95C"
-                                                           ),
-                                                           
-                
-                                                          
                                                     
+                                                    div(
+                                                      style = "display: grid; 
+                                                      grid-template-columns: 30% repeat(3, 30%); 
+                                                      grid-gap: 10px;",
+                                                      pickerInput(inputId = "textin2",  
+                                                                  choices = c("ingredient", "ackee", "acorn squash", "agave syrup", "all-purpose flour", "almond drink", "almonds", "anchovy", "anise", "apple", "apple juice", "apple vinegar", "apricot", "apricot", "artichoke", "arugula",  "avocado", "baby carrot", "baby corn", "baby peas", "baby spinach",  "bacon", "baking powder", "baking soda", "balsamic vinegar",  "banana", "banana squash", "barley", "barley", "barley", "barracuda",  "basa", "basil", "basil", "basmati rice", "bass", "bay leaves",  "bbq sauce", "beans", "beans", "beans", "beef", "beef broth", "beef cold cuts", "beef mince", "beer", "beetroot", "beetroot", "bell pepper", "bibb lettuce", "bitter melon", "black beans", "black beans", "black cod", "black-eyed beans", "blackberries", "blackcurrants", "blood orange", "blowfish", "blueberries", "blueberries",  "bluefish", "bok choy", "bombay duck", "borlotti beans", "borlotti beans", "boysenberries", "brandy", "bread baguette", "bream", "brill",  "broad beans", "broad beans", "broccoli", "brown lentils", "brown rice", "brown sugar", "brussel sprouts", "brussel sprouts", "bulgur", "burger bun", "butter", "butter fish", "buttermilk", "butternut squash", "cantaloupe", "caraway", "cardamom", "carrot", "cashew nuts", "catfish", "catnip", "cauliflower", "celeriac", "celery", "cheddar cheese", "cheese", "cheese emmentaler", "cherries", "cherry tomatoes", "chervil", "chestnuts", "chia seeds", "chicken", "chicken broth", "chicken cold cuts", "chicken nuggets", "chickpeas", "chickpeas", "chicory", "chili", "chives", "cilantro", "cinnamon", "clams",  "clementine", "cloudberries", "clove", "cockles", "cocoa beans", "cocoa powder", "coconut", "coconut milk", "coconut oil", "cod", "coffee", "coffee beans", "coffee powder", "cognac", "collard green", "corn", "corn", "corn", "corn", "corn kernel", "corn kernel", "corn kernel", "cornstarch", "cottonseed oil", "couscous", "crab", "crab apple", "cranberries", "crayfish", "cream", "cream cheese", "crispbread", "cucumber", "cumin", "curd cheese", "currants", "curry", "damson", "dark chocolate", "dates", "dates", "dates", "delicata squash", "dill", "dogfish", "dorade", "egg", "egg noodles",  "eggplant", "elderberries", "endive", "extravirgin olive oil", "fava beans", "fava beans", "fennel", "fig", "fish oil", "fish sauce",  "flounder", "french fries", "fuji apple", "full cream milk",  "full-fat margarine", "garlic", "gelatin", "gem squash", "ginger", "gnocchi", "goji berries", "gooseberries", "granulated sugar", "grapefruit", "grapes", "green asparagus", "green beans", "green beans", "green bell pepper", "green lentils", "green olives", "green onion", "grouper", "habanero", "haddock", "hake", "half-fat margarine",  "halibut", "ham", "hazelnuts", "herbs", "herring", "honey", "honeyberries", "honeydew", "horseradish", "hot dog", "hubbard squash", "ice","iceberg lettuce", "icing sugar", "jabuticabas", "jalapeno",  "jambul", "japanese plum", "jerusalem artichoke", "john dory", "jostaberries", "juniper berries", "kalamata olives", "kale", "kale", "ketchup", "kidney beans", "kidney beans", "kiwi", "kohlrabi","kumquat", "lamb", "lamb's lettuce", "langostino", "lasagna noodles", "leek", "lemon", "lemon balm", "lemon grass", "lemon juice","lemon zest", "lentils", "lentils", "lentils", "lettuce", "lime", "lingcod", "linguine", "linseed", "liquor", "low-fat curd cheese", "lupin flour", "macadamia nuts", "mackerel", "mahi mahi", "mandarine", "mango", "marionberries", "marjoram", "mayonnaise", "melon",  "milk", "milk chocolade", "millet", "mineral water", "mint", "miracle fruit", "mixed salad", "monkfish", "morel mushrooms",  "mozzarella", "mulberries", "mullet", "mung beans", "mung beans", "mushrooms", "mushrooms", "mussels", "mustard", "mustard leaves", "mustard seeds", "navy beans", "navy beans", "nectarine", "nutmeg", "oats", "oats drink", "okra", "olive oil", "olives", "onion", "onion powder", "orange", "orange juice", "orange peel",  "orange roughy", "oregano", "oregano", "oysters", "palm fruit",  "palm kernel oil", "palm oil", "panko", "papaya", "paprika",   "paris market carrot", "parmesan", "parsley", "passion fruit", "pasta", "pastry", "patagonian toothfish", "pea veggie burger", "peach", "peach", "peanut butter", "peanuts", "pear", "pearl barley",  "peas", "peas", "peas", "peas", "pecans", "pepper", "peppermint",  "perch", "philadelphia cream cheese", "pike", "pine nuts", "pineapple", "pineapple", "pineberries", "pinto beans", "pinto beans", "pistachios", "plum", "pollock", "pomfret", "pompano", "poppy seed", "porcini mushrooms", "pork", "portobello mushrooms", "potato", "potato", "potato",  "potato starch", "prawns", "puff pastry", "pumpkin", "quinoa",  "radish", "rape oil", "raspberries", "raspberries", "red bell pepper", "red cabbage", "red cabbage", "red chilli", "red meat", "red onion",  "red wine", "redcurrants", "rice", "ricotta", "rosemary", "runner beans",  "runner beans", "russet  potato", "russet  potato", "russet  potato", "rye", "rye", "rye", "saffron", "sage", "salal berries", "salmon",  "salmonberries", "salt", "sanddab", "sardine", "sausage", "savoy", "scallion", "scallops", "scampi", "schmand", "sea bass", "sea salt",  "sesame", "sesame oil", "shad", "shallot", "shiitake mushrooms", "shrimps", "skate", "skimmed milk", "sole", "sour cream", "soy curd",  "soy sauce", "soy veggie burger", "soybean drink", "soybean oil", "soybeans", "soybeans", "soybeans", "spaghetti squash", "spearmint",  "spelt drink", "spices", "spinach", "split peas", "split peas", "split peas", "sprat", "spring onion", "strawberries", "strawberries", "sturgeon", "sugar", "sugar snap peas", "sugar snap peas", "sugar snap peas", "sunflower oil", "sunflower seeds", "sunflower seeds", "surinam cherries","sweet potato", "sweet sorghum grain", "sweet sorghum stem",  "sweetcorn", "swordfish", "tabasco sauce", "tangerine", "tap water", "tarragon", "tawny port", "tea", "tempeh", "thuringian sausage", "thyme", "tilapia", "tilefish", "toast", "tofu", "tomato", "tomato", "tomatoes paste", "trout", "tuna", "turbot", "turmeric", "vanilin",  "vanilla", "vanilla extract", "vegan sausage", "vegan spreadable fat", "vegetable stock", "veggie nugget", "veggie patty", "venison", "walnuts", "wasabi", "watermelon", "wheat berries", "wheat bread", "wheat bread bun", "whey", "whipping cream", "white asparagus",  "white cabbage", "white chocolate", "white currants", "white radish", "white wine", "white wine vinegar", "whitebait", "whitefish",  "whiting", "wholegrain bread", "wholegrain bread bun", "wholegrain toast", "wholewheat flour", "wholewheat noodles", "wild mushrooms", "wild rice", "wine", "yeast", "yeast extract", "yellow bell pepper", "yogurt", "zucchini"), 
+                                                                  selected = "choice", 
+                                                                  options = list(`live-search` = TRUE)),
+                                                      
+                                                      textInput("quantityin2",NULL, 
+                                                                placeholder = "e.g. 200" ),
+                                                      
+                                                      pickerInput(inputId = "unitin2",  
+                                                                  choices = c("#", "bottle", "bunch", "bunches", "c", "can", "cans", "carton", "cartons", "cc", "centimeter", "centimeters", "centimetre", "centimetres", "chunk", "chunks", "cl", "cm", "cms", "cube", "cup", "cups", "dash", "dashes", "dc", "deci", "deciliter", "deciliters", "dl", "drop", "drops", "fl oz", "fl pt", "fl qt", "fluid ounce", "g",  "gal", "gallon", "gallons", "gill", "gram", "grams", "gs", "head", "inch", "inches", "jar", "jars", "jigger", "k", "kg", "kgs", "kilo", "kilogram", "kilogramme", "kilogrammes", "kilograms",  "kilos", "knob", "l", "lb", "lbs", "leaf", "leaves", "liter", "liters", "litre", "litres", "lts", "mg", "mgs", "milligram", "milligramme", "milligrammes", "milliliter", "milliliters", "millilitre", "millimeter", "millimeters", "millimetre", "millimetres", "ml",  "mls", "mm", "ounce", "ounces", "oz", "p", "package", "packages",  "packet", "packets", "piece", "pieces", "pinch", "pinches", "pint",  "pints", "pkt", "pod", "pods", "portion", "portions", "pound",  "pounds", "pt", "q", "qt", "quart", "sachet", "sachets", "scoop",  "scoops", "sheet", "sheets", "sized", "slice", "slices", "sprig", "sprigs", "stalk", "stalks", "stick", "sticks", "strip", "strips",  "t", "tablespoon", "tablespoons", "tbl", "tbs", "tbsp", "teaspoon", "teaspoons", "tin", "tsp", "wedge", "wedges"), 
+                                                                  selected = "choose", 
+                                                                  options = list(`live-search` = TRUE)),
+                                                    ),
+                                                    
+                                                          
+                                                   
+                                                    # add ingredients button
+                                                    
+                                                    div(actionButton("add_btn", "Add Ingredient"), 
+                                                        style = "padding-top:0px;"),
+                                                    tags$div(id = "add_btn"),
+                                                    
+                                                    # ingredients calculate button
+                                                    div(actionButton('btn2',"CALCULATE", 
+                                                                        style="color:white; background-color:#7AA95C"),
+                                                        style = "padding-left:75%; padding-top: 10%; padding-bottom: 30px;" ),
+                                                    
+                                                    
+                                                    
+                                                    #Score output
+                                                    tags$style(type='text/css', '#ingredout {background-color:#7AA95C; color: black;}'),
+                                                    div(textOutput("ingredout"),
+                                                               style= "padding-left:15%; padding-right:20%; 
+                                                                        padding-top: 10%; padding-bottom: 30px;",
+                                                              align= "center")
                                                     
                                              ),
+                                             
+                                             
                                              column(width = 6,
-                                                    column(width = 12,
+                                                    style="padding-top:50px; 
+                                                    background-image: url(https://github.com/ZverM7/front_end/blob/main/www/calculator.jpg?raw=true); 
+                                                    background-size:cover;",
                                                     h2("Or paste the URL here."), 
-                                                    textInput("urlin", "URL",
-                                                              placeholder = "https://www.food.com/recipe/pretty-freaking-awesome-pulled-pork-crock-pot-484624", 
-                                                              value="https://www.food.com/recipe/pretty-freaking-awesome-pulled-pork-crock-pot-484624",
-                                                              width = "100%"),
-                                                    textOutput("urlout"),
                                                     
-                                                    #calculate button
-                                                    actionButton('btn3', 
+                                                    textInput("urlin", "URL",
+                                                              placeholder = "https://www...", 
+                                                              #value="https://www.food.com/recipe/pretty-freaking-awesome-pulled-pork-crock-pot-484624",
+                                                              width = "100%"),
+                                                    
+                                                    
+                                                    # url calculate button
+                                                    
+                                                    div(actionButton('btn3', 
                                                                        label = 'CALCULATE', 
                                                                        style="background-color:#7AA95C; color:white"
-                                                                      )
-                                                          )
+                                                                    ),
+                                                        style = "padding-left:75%; padding-top: 43%"
+                                                        ),
+                                                    
+                                                    # co2 score url
+                                                    tags$style(type='text/css', '#urlout {background-color:#7AA95C; color: black;}'),
+                                                    div(textOutput("urlout"),
+                                                        style = "padding-left:25%; padding-top: 40px",
+                                                        align= "center"),
+                                                 
+                                                     )
+                                                
+                                                    
+                                           
+                                                    
                                                     
                                                     )
-                                                    )
                                            ),
-                        #Recommendations page
+                        #Recommendations page              ############################################################## 
                                   tabPanel("Recommendations", 
                                            fluidRow(
                                              tags$head(
@@ -405,6 +278,11 @@ ui <- fluidPage(
                                                   h2("CO2 footprint of your recipe...",
                                                      style="padding-top:50px;"
                                                      ),
+                                                  br(),
+                                                  h4(em("Placeholder"), 
+                                                     align ="center",
+                                                     style ="padding-top:30px; padding-bottom:30px; padding-left:30px;
+                                                     padding-right:30px; border-style:solid; border-color:#7AA95C;"),
                                                   h4("Do you want to be more sustainable and learn more about 
                                                     food emissions? Look at the recommendations on the right 
                                                     side to lower your CO2 score, and browse to the next page
@@ -413,19 +291,39 @@ ui <- fluidPage(
                                                      style="padding-top:50px"),
                                            ),
                                            column(width = 6,
+                                                  style=" 
+                                                    background-image: url(https://github.com/ZverM7/front_end/blob/main/www/recommendations.jpg?raw=true); 
+                                                    background-size:cover;",
                                                   h2("Our recommendations for you...",
                                                      style="padding-top:50px;"
                                                      ),
                                                   h4("Instead of...", align="center"),
+                                                  h4(em("Placeholder"), 
+                                                     align ="center",
+                                                     style ="padding-top:10px; padding-bottom:10px; padding-left:10px;
+                                                     padding-right:10px; border-style:solid; border-color:#7AA95C;"),
                                                   h4("...change to",  align="center"),
+                                                  h4(em("Placeholder"), 
+                                                     align ="center",
+                                                     style ="padding-top:10px; padding-bottom:10px; padding-left:10px;
+                                                     padding-right:10px; border-style:solid; border-color:#7AA95C;"),
                                                   h2("New CO2 score after the swaps:"),
+                                                  h4(em("Placeholder"), 
+                                                     align ="center",
+                                                     style ="padding-top:10px; padding-bottom:10px; padding-left:10px;
+                                                     padding-right:10px; border-style:solid; border-color:#7AA95C;"),
+                                                 
+                                                   #Button to learn more page
+                                                  div(pageButtonUi2("prova"),
+                                                      style = "padding-left: 50%; padding-top: 40px"),
+                                                  
                                                   
                                            ),
                                            )),
                                      
                       
                       
-                        #Learn more page
+                        #Learn more page             ############################################################## 
                                   tabPanel("Learn more",
                                            fluidRow(
                                              tags$head(
@@ -435,149 +333,97 @@ ui <- fluidPage(
                                                  h2("Discover more about food emissions",
                                                     style="padding-top:50px;"
                                                  ),
-                                                 h4("Type an ingredient and select from the drop down menus its variety and certification, and see how the score changes!", 
+                                                 h4("Type an ingredient and select from the drop down menus its 
+                                                    variety and certification, and see how the score changes!", 
                                                     style="padding-top:40px; padding-right:0px;"),
-                                                 column(width = 3,
-                                                        pickerInput("textR", "Ingredients", choices = c("mushrooms", "corn", "tomato", "beans", "peas", "chickpeas", 
-                                                                                                        "lentils", "pineapple", "apricot", "peach", "basil", "rosemary", 
-                                                                                                        "thyme", "dates", "tea", "oregano", "lentils", "dates", "spices", 
-                                                                                                        "basil", "oregano", "beetroot", "dates", "crab", "crayfish", 
-                                                                                                        "langostino", "prawns", "scampi", "shrimps", "brussel sprouts", 
-                                                                                                        "strawberries", "blueberries", "raspberries", "french fries", 
-                                                                                                        "beetroot", "red cabbage", "kale", "black-eyed beans", "plum", 
-                                                                                                        "burger bun", "anise", "baking powder", "baking soda", "lemon balm", 
-                                                                                                        "balsamic vinegar", "bbq sauce", "bay leaves", "cardamom", "chervil", 
-                                                                                                        "chia seeds", "chili", "cinnamon", "clove", "cilantro", "cumin", 
-                                                                                                        "turmeric", "curry", "dill", "fish sauce", "gelatin", "ginger", 
-                                                                                                        "herbs", "ketchup", "lemon grass", "macadamia nuts", "marjoram", 
-                                                                                                        "mayonnaise", "caraway", "mustard", "mustard seeds", "mustard leaves", 
-                                                                                                        "nutmeg", "sesame oil", "onion powder", "paprika", "parsley", 
-                                                                                                        "pecans", "pepper", "pine nuts", "poppy seed", "saffron", "sage", 
-                                                                                                        "salt", "sea salt", "sesame", "soy sauce", "agave syrup", "tabasco sauce", 
-                                                                                                        "tarragon", "tomatoes paste", "vanilin", "vanilla extract", "apple vinegar", 
-                                                                                                        "white wine vinegar", "wasabi", "yeast extract", "yeast", "beer", 
-                                                                                                        "brandy", "cognac", "liquor", "tawny port", "red wine", "white wine", 
-                                                                                                        "wine", "half-fat margarine", "extravirgin olive oil", "olive oil", 
-                                                                                                        "sunflower oil", "vegan spreadable fat", "full-fat margarine", 
-                                                                                                        "clams", "cockles", "mussels", "oysters", "scallops", "egg", 
-                                                                                                        "sausage", "hot dog", "mushrooms", "morel mushrooms", "porcini mushrooms", 
-                                                                                                        "portobello mushrooms", "shiitake mushrooms", "wild mushrooms", 
-                                                                                                        "lamb's lettuce", "collard green", "kale", "cherry tomatoes", 
-                                                                                                        "kohlrabi", "acorn squash", "banana squash", "butternut squash", 
-                                                                                                        "delicata squash", "gem squash", "hubbard squash", "pumpkin", 
-                                                                                                        "spaghetti squash", "chives", "leek", "brussel sprouts", "arugula", 
-                                                                                                        "mixed salad", "sweet potato", "savoy", "wholegrain bread bun", 
-                                                                                                        "wheat bread bun", "bulgur", "couscous", "millet", "crispbread", 
-                                                                                                        "egg noodles", "lasagna noodles", "linguine", "pasta", "wholewheat noodles", 
-                                                                                                        "toast", "wholegrain toast", "wholegrain bread", "bread baguette", 
-                                                                                                        "wheat bread", "all-purpose flour", "panko", "wholewheat flour", 
-                                                                                                        "walnuts", "brown lentils", "green lentils", "lentils", "cream cheese", 
-                                                                                                        "philadelphia cream cheese", "ricotta", "low-fat curd cheese", 
-                                                                                                        "mozzarella", "curd cheese", "whipping cream", "schmand", "blackberries", 
-                                                                                                        "fig", "grapefruit", "blueberries", "raspberries", "cherries", 
-                                                                                                        "honeyberries", "jabuticabas", "surinam cherries", "mango", "passion fruit", 
-                                                                                                        "ackee", "damson", "jambul", "japanese plum", "gooseberries", 
-                                                                                                        "watermelon", "icing sugar", "vegetable stock", "honey", "chicken broth", 
-                                                                                                        "coconut milk", "beef broth", "pea veggie burger", "soy veggie burger", 
-                                                                                                        "peanut butter", "pastry", "puff pastry", "veggie nugget", "veggie patty", 
-                                                                                                        "gnocchi", "chicken nuggets", "chicken cold cuts", "coffee powder", 
-                                                                                                        "cocoa powder", "cheese emmentaler", "parmesan", "lupin flour", 
-                                                                                                        "spelt drink", "oats drink", "almond drink", "mineral water", 
-                                                                                                        "soy curd", "beef mince", "apple juice", "orange juice", "dark chocolate", 
-                                                                                                        "milk chocolade", "white chocolate", "tempeh", "venison", "vegan sausage", 
-                                                                                                        "thuringian sausage", "beef cold cuts", "ham", "bacon", "cashew nuts", 
-                                                                                                        "chestnuts", "hazelnuts", "pistachios", "artichoke", "jerusalem artichoke", 
-                                                                                                        "chicory", "endive", "cheddar cheese", "quinoa", "almonds", "apple", 
-                                                                                                        "crab apple", "fuji apple", "apricot", "eggplant", "avocado", 
-                                                                                                        "banana", "barley", "pearl barley", "barley", "barley", "broccoli", 
-                                                                                                        "butter", "buttermilk", "red cabbage", "bok choy", "white cabbage", 
-                                                                                                        "baby carrot", "carrot", "beef", "cauliflower", "celeriac", "celery", 
-                                                                                                        "cheese", "chicken", "cocoa beans", "coconut oil", "coconut", 
-                                                                                                        "coffee", "coffee beans", "cottonseed oil", "full cream milk", 
-                                                                                                        "milk", "cream", "sour cream", "cucumber", "beans", "black beans", 
-                                                                                                        "borlotti beans", "broad beans", "fava beans", "green beans", 
-                                                                                                        "kidney beans", "mung beans", "navy beans", "pinto beans", "runner beans", 
-                                                                                                        "beans", "black beans", "borlotti beans", "broad beans", "fava beans", 
-                                                                                                        "green beans", "kidney beans", "mung beans", "navy beans", "pinto beans", 
-                                                                                                        "runner beans", "fennel", "fish oil", "barracuda", "basa", "bass", 
-                                                                                                        "black cod", "blowfish", "brill", "butter fish", "catfish", "cod", 
-                                                                                                        "dorade", "flounder", "grouper", "haddock", "halibut", "lingcod", 
-                                                                                                        "monkfish", "mullet", "patagonian toothfish", "perch", "pike", 
-                                                                                                        "pollock", "salmon", "sanddab", "sea bass", "shad", "skate", 
-                                                                                                        "sole", "sturgeon", "tilefish", "turbot", "whitebait", "whitefish", 
-                                                                                                        "whiting", "anchovy", "hake", "tuna", "bluefish", "bombay duck", 
-                                                                                                        "bream", "dogfish", "herring", "john dory", "mackerel", "mahi mahi", 
-                                                                                                        "orange roughy", "pomfret", "pompano", "sardine", "sprat", "swordfish", 
-                                                                                                        "grapes", "green asparagus", "bell pepper", "green bell pepper", 
-                                                                                                        "habanero", "jalapeno", "okra", "red bell pepper", "red chilli", 
-                                                                                                        "yellow bell pepper", "iceberg lettuce", "kiwi", "lemon", "lemon juice", 
-                                                                                                        "lemon zest", "lime", "bibb lettuce", "lettuce", "linseed", "baby corn", 
-                                                                                                        "corn", "corn", "corn", "corn kernel", "corn kernel", "corn kernel", 
-                                                                                                        "cornstarch", "clementine", "mandarine", "tangerine", "bitter melon", 
-                                                                                                        "cantaloupe", "honeydew", "melon", "catnip", "mint", "peppermint", 
-                                                                                                        "spearmint", "oats", "green olives", "kalamata olives", "olives", 
-                                                                                                        "garlic", "green onion", "onion", "red onion", "scallion", "shallot", 
-                                                                                                        "spring onion", "blood orange", "kumquat", "orange", "orange peel", 
-                                                                                                        "palm fruit", "palm kernel oil", "palm oil", "papaya", "paris market carrot", 
-                                                                                                        "nectarine", "peach", "peanuts", "pear", "pineapple", "potato", 
-                                                                                                        "russet  potato", "potato starch", "potato", "russet  potato", 
-                                                                                                        "potato", "russet  potato", "baby peas", "chickpeas", "peas", 
-                                                                                                        "split peas", "sugar snap peas", "peas", "split peas", "sugar snap peas", 
-                                                                                                        "peas", "split peas", "sugar snap peas", "horseradish", "radish", 
-                                                                                                        "white radish", "rape oil", "red meat", "basmati rice", "brown rice", 
-                                                                                                        "rice", "wild rice", "rye", "rye", "rye", "lamb", "skimmed milk", 
-                                                                                                        "soybeans", "soybean drink", "soybean oil", "soybeans", "soybeans", 
-                                                                                                        "baby spinach", "new zealand spinach", "spinach", "blackcurrants", 
-                                                                                                        "boysenberries", "cloudberries", "cranberries", "currants", "elderberries", 
-                                                                                                        "goji berries", "jostaberries", "juniper berries", "marionberries", 
-                                                                                                        "miracle fruit", "mulberries", "pineberries", "redcurrants", 
-                                                                                                        "salal berries", "salmonberries", "strawberries", "wheat berries", 
-                                                                                                        "white currants", "brown sugar", "granulated sugar", "sugar", 
-                                                                                                        "sunflower seeds", "sunflower seeds", "sweetcorn", "sweet sorghum grain", 
-                                                                                                        "sweet sorghum stem", "pork", "ice", "tap water", "tilapia", 
-                                                                                                        "tofu", "tomato", "trout", "vanilla", "whey", "white asparagus", 
-                                                                                                        "yogurt", "zucchini"), selected = "choose", options = list(`live-search` = TRUE)),
-                                                       
-                                                        
-                                                 ),
-                                                 column(width = 3,
-                                                        pickerInput(inputId = "varietyR", 
-                                                                    label = "Variety", 
-                                                                    choices = c("canned","frozen", "fresh", "dry", "glass"), 
-                                                                    selected = "choose", 
-                                                                    options = list(`live-search` = TRUE)),
-                                                 ),
-                                                 column(width = 3,
-                                                        pickerInput(inputId = "certificationR", 
-                                                                    label = "Certification", 
-                                                                    choices = c("organic","conventional", "swiss integrated production"), 
-                                                                    selected = "choose", 
-                                                                    options = list(`live-search` = TRUE)),
-                                                 ),
-                                                 column(width = 3,
-                                                        #placeholder for CO2 score
-                                                        textOutput("C02"),
-                                                 ),
-                                                 column(width = 12,
-                                                        h4("See the overview about the ingredient’s relative CO2 scores
-                                                       based on variety and certification", 
-                                                           style="padding-left:0px; padding-top:40px; padding-right:0px;"),
-                                                 ),
+                                                 
+                                                 #ingredient input
+                                                 
+                                                 div(
+                                                   style = "display: grid; 
+                                                      grid-template-columns: 25% repeat(4, 25%); 
+                                                      grid-gap: 10px; padding-top:20px;",
+                                                   
+                                                   pickerInput(inputId = "textin", 
+                                                               label = "Ingredients", 
+                                                               choices = c("ingredient", "ackee", "acorn squash", "agave syrup", "all-purpose flour", "almond drink", "almonds", "anchovy", "anise", "apple", "apple juice", "apple vinegar", "apricot", "apricot", "artichoke", "arugula",  "avocado", "baby carrot", "baby corn", "baby peas", "baby spinach",  "bacon", "baking powder", "baking soda", "balsamic vinegar",  "banana", "banana squash", "barley", "barley", "barley", "barracuda",  "basa", "basil", "basil", "basmati rice", "bass", "bay leaves",  "bbq sauce", "beans", "beans", "beans", "beef", "beef broth", "beef cold cuts", "beef mince", "beer", "beetroot", "beetroot", "bell pepper", "bibb lettuce", "bitter melon", "black beans", "black beans", "black cod", "black-eyed beans", "blackberries", "blackcurrants", "blood orange", "blowfish", "blueberries", "blueberries",  "bluefish", "bok choy", "bombay duck", "borlotti beans", "borlotti beans", "boysenberries", "brandy", "bread baguette", "bream", "brill",  "broad beans", "broad beans", "broccoli", "brown lentils", "brown rice", "brown sugar", "brussel sprouts", "brussel sprouts", "bulgur", "burger bun", "butter", "butter fish", "buttermilk", "butternut squash", "cantaloupe", "caraway", "cardamom", "carrot", "cashew nuts", "catfish", "catnip", "cauliflower", "celeriac", "celery", "cheddar cheese", "cheese", "cheese emmentaler", "cherries", "cherry tomatoes", "chervil", "chestnuts", "chia seeds", "chicken", "chicken broth", "chicken cold cuts", "chicken nuggets", "chickpeas", "chickpeas", "chicory", "chili", "chives", "cilantro", "cinnamon", "clams",  "clementine", "cloudberries", "clove", "cockles", "cocoa beans", "cocoa powder", "coconut", "coconut milk", "coconut oil", "cod", "coffee", "coffee beans", "coffee powder", "cognac", "collard green", "corn", "corn", "corn", "corn", "corn kernel", "corn kernel", "corn kernel", "cornstarch", "cottonseed oil", "couscous", "crab", "crab apple", "cranberries", "crayfish", "cream", "cream cheese", "crispbread", "cucumber", "cumin", "curd cheese", "currants", "curry", "damson", "dark chocolate", "dates", "dates", "dates", "delicata squash", "dill", "dogfish", "dorade", "egg", "egg noodles",  "eggplant", "elderberries", "endive", "extravirgin olive oil", "fava beans", "fava beans", "fennel", "fig", "fish oil", "fish sauce",  "flounder", "french fries", "fuji apple", "full cream milk",  "full-fat margarine", "garlic", "gelatin", "gem squash", "ginger", "gnocchi", "goji berries", "gooseberries", "granulated sugar", "grapefruit", "grapes", "green asparagus", "green beans", "green beans", "green bell pepper", "green lentils", "green olives", "green onion", "grouper", "habanero", "haddock", "hake", "half-fat margarine",  "halibut", "ham", "hazelnuts", "herbs", "herring", "honey", "honeyberries", "honeydew", "horseradish", "hot dog", "hubbard squash", "ice","iceberg lettuce", "icing sugar", "jabuticabas", "jalapeno",  "jambul", "japanese plum", "jerusalem artichoke", "john dory", "jostaberries", "juniper berries", "kalamata olives", "kale", "kale", "ketchup", "kidney beans", "kidney beans", "kiwi", "kohlrabi","kumquat", "lamb", "lamb's lettuce", "langostino", "lasagna noodles", "leek", "lemon", "lemon balm", "lemon grass", "lemon juice","lemon zest", "lentils", "lentils", "lentils", "lettuce", "lime", "lingcod", "linguine", "linseed", "liquor", "low-fat curd cheese", "lupin flour", "macadamia nuts", "mackerel", "mahi mahi", "mandarine", "mango", "marionberries", "marjoram", "mayonnaise", "melon",  "milk", "milk chocolade", "millet", "mineral water", "mint", "miracle fruit", "mixed salad", "monkfish", "morel mushrooms",  "mozzarella", "mulberries", "mullet", "mung beans", "mung beans", "mushrooms", "mushrooms", "mussels", "mustard", "mustard leaves", "mustard seeds", "navy beans", "navy beans", "nectarine", "nutmeg", "oats", "oats drink", "okra", "olive oil", "olives", "onion", "onion powder", "orange", "orange juice", "orange peel",  "orange roughy", "oregano", "oregano", "oysters", "palm fruit",  "palm kernel oil", "palm oil", "panko", "papaya", "paprika",   "paris market carrot", "parmesan", "parsley", "passion fruit", "pasta", "pastry", "patagonian toothfish", "pea veggie burger", "peach", "peach", "peanut butter", "peanuts", "pear", "pearl barley",  "peas", "peas", "peas", "peas", "pecans", "pepper", "peppermint",  "perch", "philadelphia cream cheese", "pike", "pine nuts", "pineapple", "pineapple", "pineberries", "pinto beans", "pinto beans", "pistachios", "plum", "pollock", "pomfret", "pompano", "poppy seed", "porcini mushrooms", "pork", "portobello mushrooms", "potato", "potato", "potato",  "potato starch", "prawns", "puff pastry", "pumpkin", "quinoa",  "radish", "rape oil", "raspberries", "raspberries", "red bell pepper", "red cabbage", "red cabbage", "red chilli", "red meat", "red onion",  "red wine", "redcurrants", "rice", "ricotta", "rosemary", "runner beans",  "runner beans", "russet  potato", "russet  potato", "russet  potato", "rye", "rye", "rye", "saffron", "sage", "salal berries", "salmon",  "salmonberries", "salt", "sanddab", "sardine", "sausage", "savoy", "scallion", "scallops", "scampi", "schmand", "sea bass", "sea salt",  "sesame", "sesame oil", "shad", "shallot", "shiitake mushrooms", "shrimps", "skate", "skimmed milk", "sole", "sour cream", "soy curd",  "soy sauce", "soy veggie burger", "soybean drink", "soybean oil", "soybeans", "soybeans", "soybeans", "spaghetti squash", "spearmint",  "spelt drink", "spices", "spinach", "split peas", "split peas", "split peas", "sprat", "spring onion", "strawberries", "strawberries", "sturgeon", "sugar", "sugar snap peas", "sugar snap peas", "sugar snap peas", "sunflower oil", "sunflower seeds", "sunflower seeds", "surinam cherries","sweet potato", "sweet sorghum grain", "sweet sorghum stem",  "sweetcorn", "swordfish", "tabasco sauce", "tangerine", "tap water", "tarragon", "tawny port", "tea", "tempeh", "thuringian sausage", "thyme", "tilapia", "tilefish", "toast", "tofu", "tomato", "tomato", "tomatoes paste", "trout", "tuna", "turbot", "turmeric", "vanilin",  "vanilla", "vanilla extract", "vegan sausage", "vegan spreadable fat", "vegetable stock", "veggie nugget", "veggie patty", "venison", "walnuts", "wasabi", "watermelon", "wheat berries", "wheat bread", "wheat bread bun", "whey", "whipping cream", "white asparagus",  "white cabbage", "white chocolate", "white currants", "white radish", "white wine", "white wine vinegar", "whitebait", "whitefish",  "whiting", "wholegrain bread", "wholegrain bread bun", "wholegrain toast", "wholewheat flour", "wholewheat noodles", "wild mushrooms", "wild rice", "wine", "yeast", "yeast extract", "yellow bell pepper", "yogurt", "zucchini"), 
+                                                               selected = "choice", 
+                                                               options = list(`live-search` = TRUE)),
+                                                   
+                                                   pickerInput(inputId = "varietyR", 
+                                                               label = "Variety", 
+                                                               choices = c("canned","frozen", "fresh", "dry", "glass"), 
+                                                               selected = "choose", 
+                                                               options = list(`live-search` = TRUE)),
+                                                   
+                                                   pickerInput(inputId = "certificationR", 
+                                                               label = "Certification", 
+                                                               choices = c("organic","conventional", 
+                                                                           "swiss integrated production"), 
+                                                               selected = "choose", 
+                                                               options = list(`live-search` = TRUE)),
+                                                   
+                                                   #placeholder for CO2 score
+                                                   textOutput("C02")),
+                                                   
+                                                 
+                                                   h4("See the overview about the ingredient’s relative CO2 scores
+                                                       based on variety and certification",
+                                                      style="padding-top:20px;"),
+                                                
+                                                 
+                                          
+                                                # Placeholder pie charts
+                                                # fig1,
+                                                # fig2,
+                                                    
+                                                
                                                  
                                                  #placeholder for relative CO2 score
                                         
                                           ),
                                           column(width = 6,
+                                                 style=" 
+                                                    background-image: url(https://github.com/ZverM7/front_end/blob/main/www/learnmore.jpg?raw=true); 
+                                                    background-size:cover;",
                                                  h2("Did you know that...",
                                                     style="padding-top:50px;"
                                                  ),
-                                                 h4("...the ingredient with less emissions is", align="center"),
-                                                 h4("...the ingredient with more emissions is",  align="center"),
+                                                 h4("...the ingredients with less emissions are", 
+                                                    align ="center",
+                                                    style ="padding-top:40px;"),
+                                                 h4(em("1) Sweet sorghum stem, with 0.0327 C02 Kg emissions per Kg 
+                                                       of ingredient"), 
+                                                    br(), 
+                                                    em("2) Russet potatoes, with 0.0888 CO2 Kg emissions per Kg 
+                                                       of ingredient"), 
+                                                    br(), 
+                                                    em("3) Paris market carrots, with 0.192 CO2 Kg emissions per Kg 
+                                                       of ingredient"), 
+                                                    align ="center",
+                                                    style ="padding-top:10px; padding-bottom:10px; padding-left:10px;
+                                                    padding-right:10px; border-style:solid; border-color:#7AA95C;"),
+                                                 h4("...the ingredients with more emissions are",  
+                                                    align="center"),
+                                                 h4(em("1) Cocoa beans, with 19.7 C02 Kg emissions per Kg of ingredient"),
+                                                    br(), 
+                                                    em("2) Cheddar cheese, with 15.15499 CO2 Kg emissions per Kg 
+                                                             of ingredient"), 
+                                                    br(), 
+                                                    em("3) Beef, with 14.9 CO2 Kg emissions per Kg of ingredient"), 
+                                                    align ="center",
+                                                    style ="padding-top:10px; padding-bottom:10px; padding-left:10px;
+                                                    padding-right:10px; border-style:solid; border-color:#7AA95C;"),
                         
                                            ),
-                                          )),
+                                          )
+                                          ),
+                      
+                                                           ############################
                        
-                                )))
+                                )
+                      )
+  )
                       
                     
   
@@ -586,72 +432,52 @@ ui <- fluidPage(
 #############SERVER##########################################################
 
 # Define server logic 
-server <- function(input, output, session, e = external_ip, p=port) {
+server <- function(input, output, session, e = "34.88.165.101", p="8080") {
   
-  #Button Homepage to calculator
+
+#Button Homepage to calculator
   pageButtonServer("navbar", parentSession = session)
-  
+ 
+#Button Recommendations to Learn more
+  pageButtonServer2("prova", parentSession = session) 
 
-
+#add ingredients button
+  observeEvent(input$add_btn, {
+    insertUI(
+      selector = "#add_btn",
+      where = "beforeBegin",
+      ui = tags$div(div(
+        style = "display: grid; 
+                                                      grid-template-columns: 30% repeat(3, 30%); 
+                                                      grid-gap: 10px;",
+        pickerInput(inputId = "textin2",  
+                    choices = c("ingredient", "ackee", "acorn squash", "agave syrup", "all-purpose flour", "almond drink", "almonds", "anchovy", "anise", "apple", "apple juice", "apple vinegar", "apricot", "apricot", "artichoke", "arugula",  "avocado", "baby carrot", "baby corn", "baby peas", "baby spinach",  "bacon", "baking powder", "baking soda", "balsamic vinegar",  "banana", "banana squash", "barley", "barley", "barley", "barracuda",  "basa", "basil", "basil", "basmati rice", "bass", "bay leaves",  "bbq sauce", "beans", "beans", "beans", "beef", "beef broth", "beef cold cuts", "beef mince", "beer", "beetroot", "beetroot", "bell pepper", "bibb lettuce", "bitter melon", "black beans", "black beans", "black cod", "black-eyed beans", "blackberries", "blackcurrants", "blood orange", "blowfish", "blueberries", "blueberries",  "bluefish", "bok choy", "bombay duck", "borlotti beans", "borlotti beans", "boysenberries", "brandy", "bread baguette", "bream", "brill",  "broad beans", "broad beans", "broccoli", "brown lentils", "brown rice", "brown sugar", "brussel sprouts", "brussel sprouts", "bulgur", "burger bun", "butter", "butter fish", "buttermilk", "butternut squash", "cantaloupe", "caraway", "cardamom", "carrot", "cashew nuts", "catfish", "catnip", "cauliflower", "celeriac", "celery", "cheddar cheese", "cheese", "cheese emmentaler", "cherries", "cherry tomatoes", "chervil", "chestnuts", "chia seeds", "chicken", "chicken broth", "chicken cold cuts", "chicken nuggets", "chickpeas", "chickpeas", "chicory", "chili", "chives", "cilantro", "cinnamon", "clams",  "clementine", "cloudberries", "clove", "cockles", "cocoa beans", "cocoa powder", "coconut", "coconut milk", "coconut oil", "cod", "coffee", "coffee beans", "coffee powder", "cognac", "collard green", "corn", "corn", "corn", "corn", "corn kernel", "corn kernel", "corn kernel", "cornstarch", "cottonseed oil", "couscous", "crab", "crab apple", "cranberries", "crayfish", "cream", "cream cheese", "crispbread", "cucumber", "cumin", "curd cheese", "currants", "curry", "damson", "dark chocolate", "dates", "dates", "dates", "delicata squash", "dill", "dogfish", "dorade", "egg", "egg noodles",  "eggplant", "elderberries", "endive", "extravirgin olive oil", "fava beans", "fava beans", "fennel", "fig", "fish oil", "fish sauce",  "flounder", "french fries", "fuji apple", "full cream milk",  "full-fat margarine", "garlic", "gelatin", "gem squash", "ginger", "gnocchi", "goji berries", "gooseberries", "granulated sugar", "grapefruit", "grapes", "green asparagus", "green beans", "green beans", "green bell pepper", "green lentils", "green olives", "green onion", "grouper", "habanero", "haddock", "hake", "half-fat margarine",  "halibut", "ham", "hazelnuts", "herbs", "herring", "honey", "honeyberries", "honeydew", "horseradish", "hot dog", "hubbard squash", "ice","iceberg lettuce", "icing sugar", "jabuticabas", "jalapeno",  "jambul", "japanese plum", "jerusalem artichoke", "john dory", "jostaberries", "juniper berries", "kalamata olives", "kale", "kale", "ketchup", "kidney beans", "kidney beans", "kiwi", "kohlrabi","kumquat", "lamb", "lamb's lettuce", "langostino", "lasagna noodles", "leek", "lemon", "lemon balm", "lemon grass", "lemon juice","lemon zest", "lentils", "lentils", "lentils", "lettuce", "lime", "lingcod", "linguine", "linseed", "liquor", "low-fat curd cheese", "lupin flour", "macadamia nuts", "mackerel", "mahi mahi", "mandarine", "mango", "marionberries", "marjoram", "mayonnaise", "melon",  "milk", "milk chocolade", "millet", "mineral water", "mint", "miracle fruit", "mixed salad", "monkfish", "morel mushrooms",  "mozzarella", "mulberries", "mullet", "mung beans", "mung beans", "mushrooms", "mushrooms", "mussels", "mustard", "mustard leaves", "mustard seeds", "navy beans", "navy beans", "nectarine", "nutmeg", "oats", "oats drink", "okra", "olive oil", "olives", "onion", "onion powder", "orange", "orange juice", "orange peel",  "orange roughy", "oregano", "oregano", "oysters", "palm fruit",  "palm kernel oil", "palm oil", "panko", "papaya", "paprika",   "paris market carrot", "parmesan", "parsley", "passion fruit", "pasta", "pastry", "patagonian toothfish", "pea veggie burger", "peach", "peach", "peanut butter", "peanuts", "pear", "pearl barley",  "peas", "peas", "peas", "peas", "pecans", "pepper", "peppermint",  "perch", "philadelphia cream cheese", "pike", "pine nuts", "pineapple", "pineapple", "pineberries", "pinto beans", "pinto beans", "pistachios", "plum", "pollock", "pomfret", "pompano", "poppy seed", "porcini mushrooms", "pork", "portobello mushrooms", "potato", "potato", "potato",  "potato starch", "prawns", "puff pastry", "pumpkin", "quinoa",  "radish", "rape oil", "raspberries", "raspberries", "red bell pepper", "red cabbage", "red cabbage", "red chilli", "red meat", "red onion",  "red wine", "redcurrants", "rice", "ricotta", "rosemary", "runner beans",  "runner beans", "russet  potato", "russet  potato", "russet  potato", "rye", "rye", "rye", "saffron", "sage", "salal berries", "salmon",  "salmonberries", "salt", "sanddab", "sardine", "sausage", "savoy", "scallion", "scallops", "scampi", "schmand", "sea bass", "sea salt",  "sesame", "sesame oil", "shad", "shallot", "shiitake mushrooms", "shrimps", "skate", "skimmed milk", "sole", "sour cream", "soy curd",  "soy sauce", "soy veggie burger", "soybean drink", "soybean oil", "soybeans", "soybeans", "soybeans", "spaghetti squash", "spearmint",  "spelt drink", "spices", "spinach", "split peas", "split peas", "split peas", "sprat", "spring onion", "strawberries", "strawberries", "sturgeon", "sugar", "sugar snap peas", "sugar snap peas", "sugar snap peas", "sunflower oil", "sunflower seeds", "sunflower seeds", "surinam cherries","sweet potato", "sweet sorghum grain", "sweet sorghum stem",  "sweetcorn", "swordfish", "tabasco sauce", "tangerine", "tap water", "tarragon", "tawny port", "tea", "tempeh", "thuringian sausage", "thyme", "tilapia", "tilefish", "toast", "tofu", "tomato", "tomato", "tomatoes paste", "trout", "tuna", "turbot", "turmeric", "vanilin",  "vanilla", "vanilla extract", "vegan sausage", "vegan spreadable fat", "vegetable stock", "veggie nugget", "veggie patty", "venison", "walnuts", "wasabi", "watermelon", "wheat berries", "wheat bread", "wheat bread bun", "whey", "whipping cream", "white asparagus",  "white cabbage", "white chocolate", "white currants", "white radish", "white wine", "white wine vinegar", "whitebait", "whitefish",  "whiting", "wholegrain bread", "wholegrain bread bun", "wholegrain toast", "wholewheat flour", "wholewheat noodles", "wild mushrooms", "wild rice", "wine", "yeast", "yeast extract", "yellow bell pepper", "yogurt", "zucchini"), 
+                    selected = "choice", 
+                    options = list(`live-search` = TRUE)),
+        
+        textInput("quantityin2",NULL, 
+                  placeholder = "e.g. 200" ),
+        
+        pickerInput(inputId = "unitin2",  
+                    choices = c("#", "bottle", "bunch", "bunches", "c", "can", "cans", "carton", "cartons", "cc", "centimeter", "centimeters", "centimetre", "centimetres", "chunk", "chunks", "cl", "cm", "cms", "cube", "cup", "cups", "dash", "dashes", "dc", "deci", "deciliter", "deciliters", "dl", "drop", "drops", "fl oz", "fl pt", "fl qt", "fluid ounce", "g",  "gal", "gallon", "gallons", "gill", "gram", "grams", "gs", "head", "inch", "inches", "jar", "jars", "jigger", "k", "kg", "kgs", "kilo", "kilogram", "kilogramme", "kilogrammes", "kilograms",  "kilos", "knob", "l", "lb", "lbs", "leaf", "leaves", "liter", "liters", "litre", "litres", "lts", "mg", "mgs", "milligram", "milligramme", "milligrammes", "milliliter", "milliliters", "millilitre", "millimeter", "millimeters", "millimetre", "millimetres", "ml",  "mls", "mm", "ounce", "ounces", "oz", "p", "package", "packages",  "packet", "packets", "piece", "pieces", "pinch", "pinches", "pint",  "pints", "pkt", "pod", "pods", "portion", "portions", "pound",  "pounds", "pt", "q", "qt", "quart", "sachet", "sachets", "scoop",  "scoops", "sheet", "sheets", "sized", "slice", "slices", "sprig", "sprigs", "stalk", "stalks", "stick", "sticks", "strip", "strips",  "t", "tablespoon", "tablespoons", "tbl", "tbs", "tbsp", "teaspoon", "teaspoons", "tin", "tsp", "wedge", "wedges"), 
+                    selected = "choose", 
+                    options = list(`live-search` = TRUE)),
+      ))
+    )
+  })
       
-    
-#type_ingredients <- eventReactive(input$btn2,{
-    #paste(input$textin)
-   #  })
-   # output$Ing <- renderText({
-    #  type_ingredients()
-   # })
-  
-type_drops <- eventReactive(input$btn2,{
-    paste(input$textin)
-    })
-    output$Ing <- renderText({
-      type_drops()
-    })  
+#co2 score from ingredients
+  observeEvent(input$btn2, {
+    output$ingredout <- renderText({ 
+      "#backend"
+      
+      })
+})
 
-    output$Ing2 <- renderText({
-      paste(input$textin2)
-    })
-    output$Ing3 <- renderText({
-      paste(input$textin3)
-    })
-    output$Ing4 <- renderText({
-      paste(input$textin4)
-    })
-    output$Ing5 <- renderText({
-      paste(input$textin5)
-    })
-    output$Qua <- renderText({
-      paste(input$quantityin)
-    })
-    output$Qua2 <- renderText({
-      paste(input$quantityin2)
-    })
-    output$Qua3 <- renderText({
-      paste(input$quantityin3)
-    })
-    output$Qua4 <- renderText({
-      paste(input$quantityin4)
-    })
-    output$Qua5 <- renderText({
-      paste(input$quantityin5)
-    })
-    output$Uni <- renderText({
-      paste(input$unitin)
-    })
-    output$Uni2 <- renderText({
-      paste(input$unitin2)
-    })
-    output$Uni3 <- renderText({
-      paste(input$unitin3)
-    })
-    output$Uni4 <- renderText({
-      paste(input$unitin4)
-    })
-    output$Uni5 <- renderText({
-      paste(input$unitin5)
-    })
-   output$urlout<-renderText({
+    
+#url 
+  observeEvent(input$btn3, {
+    output$urlout <- renderText({
      base = paste0("http://", e,":", p,"/")
      r <- httr::GET(url=base,
                     path="get_table",
@@ -659,13 +485,13 @@ type_drops <- eventReactive(input$btn2,{
                     )
      fromJSON(content(r, "text"))
    }) 
-    
+   })
+  
   }
  
 
 
 #############################################################################
+
 # Run the application 
 shinyApp(ui = ui, server = server)
-}
-
