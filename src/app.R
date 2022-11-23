@@ -493,21 +493,16 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
 #co2 score from ingredients
   observeEvent(input$btn2, {
     
-    ings <- c(input$textin, input$textin2, input$textin3, input$textin4, input$textin5,
-                                    input$textin6, input$textin7, input$textin8, input$textin9, input$textin10, 
-                                    input$textin11, input$textin12)
-    quants <- c(input$quantityin, input$quantityin2, input$quantityin3, input$quantityin4, 
-                                  input$quantityin5, input$quantityin6, input$quantityin7, input$quantityin8,
-                                  input$quantityin9, input$quantityin10, input$quantityin11, input$quantityin12)
-    measurs <- c(input$unitin, input$unitin2, input$unitin3, input$unitin4, input$unitin5, input$unitin6, 
-                             input$unitin7, input$unitin8,input$unitin9, input$unitin10, input$unitin11, input$unitin12)
+    #ings <- c(input$textin, input$textin2, input$textin3, input$textin4, input$textin5,input$textin6, input$textin7, input$textin8, input$textin9, input$textin10, input$textin11, input$textin12)
+    #quants <- c(input$quantityin, input$quantityin2, input$quantityin3, input$quantityin4, input$quantityin5, input$quantityin6, input$quantityin7, input$quantityin8, input$quantityin9, input$quantityin10, input$quantityin11, input$quantityin12)
+    #measurs <- c(input$unitin, input$unitin2, input$unitin3, input$unitin4, input$unitin5, input$unitin6, input$unitin7, input$unitin8,input$unitin9, input$unitin10, input$unitin11, input$unitin12)
     
     #connection to the backend
     output$ingredout <- renderText({ 
       base = paste0("http://", e,":", p,"/")
       r <- httr::GET(url=base,
                      path="get_score_manual",
-                     query=list(list_ing=ings, list_quant=quants, list_meas=measurs), verbose()
+                     query=list(list_ing=input$textin,list_ing=input$textin2, list_ing=input$textin3 , list_quant=input$quantityin, list_quant=input$quantityin2, list_quant=input$quantityin3, list_meas=input$unitin, list_meas=input$unitin2, list_meas=input$unitin3), verbose()
       )
       fromJSON(content(r, "text"))
       })
