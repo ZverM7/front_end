@@ -451,7 +451,7 @@ ui <- fluidPage(
 #############SERVER##########################################################
 
 # Define server logic 
-server <- function(input, output, session, e = "35.228.36.220", p="8080") {
+server <- function(input, output, session, e = "35.228.16.65", p="8080") {
   
 
 #Button Homepage to calculator
@@ -493,23 +493,17 @@ server <- function(input, output, session, e = "35.228.36.220", p="8080") {
 #co2 score from ingredients
   observeEvent(input$btn2, {
     
-    #pickerinput as datatable
-    df<-data.frame("ingredients" = c(input$textin, input$textin2, input$textin3, input$textin4, input$textin5,
-                                    input$textin6, input$textin7, input$textin8, input$textin9, input$textin10, 
-                                    input$textin11, input$textin12), 
-                   "quantity" = c(input$quantityin, input$quantityin2, input$quantityin3, input$quantityin4, 
-                                  input$quantityin5, input$quantityin6, input$quantityin7, input$quantityin8,
-                                  input$quantityin9, input$quantityin10, input$quantityin11, input$quantityin12), 
-                   "unit" = c(input$unitin, input$unitin2, input$unitin3, input$unitin4, input$unitin5, input$unitin6, 
-                             input$unitin7, input$unitin8,input$unitin9, input$unitin10, input$unitin11, input$unitin12))
-    write_csv(df, "~/Documents/UZH/Prototyping Data Science Products/app/test_safe.csv")
-    
     #connection to the backend
     output$ingredout <- renderText({ 
       base = paste0("http://", e,":", p,"/")
       r <- httr::GET(url=base,
-                     path="get_table",
-                     query=list(foodlink=df), verbose()
+                     path="get_score_manual",
+                     query=list(list_ing=c(input$textin, input$textin2, input$textin3, input$textin4, input$textin5,
+                                    input$textin6, input$textin7, input$textin8, input$textin9, input$textin10, 
+                                    input$textin11, input$textin12), list_quant=c(input$quantityin, input$quantityin2, input$quantityin3, input$quantityin4, 
+                                  input$quantityin5, input$quantityin6, input$quantityin7, input$quantityin8,
+                                  input$quantityin9, input$quantityin10, input$quantityin11, input$quantityin12), list_meas=c(input$unitin, input$unitin2, input$unitin3, input$unitin4, input$unitin5, input$unitin6, 
+                             input$unitin7, input$unitin8,input$unitin9, input$unitin10, input$unitin11, input$unitin12)), verbose()
       )
       fromJSON(content(r, "text"))
       })
@@ -530,7 +524,7 @@ server <- function(input, output, session, e = "35.228.36.220", p="8080") {
       #"your CO2 score is"
      base = paste0("http://", e,":", p,"/")
      r <- httr::GET(url=base,
-                    path="get_table",
+                    path="get_score",
                     query=list(foodlink=input$urlin), verbose()
                     )
      fromJSON(content(r, "text"))
