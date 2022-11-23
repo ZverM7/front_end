@@ -19,6 +19,9 @@ run_shiny_front <- function(external_ip, port){
 #install.packages("xlsx")
 #install.packages("readxl")
 #install.packages("httr")
+#install.packages("data.table")
+#install.packages("readr")
+
 library(plotly)
 library(jsonlite)
 library(httr)
@@ -29,18 +32,20 @@ library(dipsaus)
 library(shinyWidgets)
 library(readxl)
 library(shinydashboard)
+library(data.table)
+library(readr)
 
 
 ############Functions#########################################################
 
-#action button to change the page
+#action button to change the page homepage
 pageButtonUi <- function(id) {
   actionButton(NS(id, "page_change"),
                label = 'GO TO CALCULATOR', 
                style="background-color:#7AA95C; color:white")
 }
 
-#button function server
+#button function server homepage to calculator
 pageButtonServer <- function(id, parentSession) {
   moduleServer(id, function(input, output, session) {
     
@@ -71,6 +76,23 @@ pageButtonServer2 <- function(id, parentSession) {
   })
 }
 
+#action button to change the page homepage
+pageButtonUi3 <- function(id) {
+  actionButton(NS(id, "page_change3"),
+               label = 'GET RECOMMENDATIONS', 
+               style="background-color:#7AA95C; color:white")
+}
+#button function server for calculator
+pageButtonServer3 <- function(id, parentSession) {
+  moduleServer(id, function(input, output, session) {
+    
+    observeEvent(input$page_change3, {
+      updateNavbarPage(session=parentSession,
+                       inputId="navbar",
+                       selected="Recommendations")
+    })
+  })
+}
 ###Placeholder code for pie charts in learn more:
 #EmissionsChart <- data.frame("Categorie"=rownames(EmissionsChart), EmissionsChart)
 #data <- EmissionsChart[,c('Categorie', 'X1960')]
@@ -92,10 +114,10 @@ ui <- fluidPage(
     
   #navigation tabs: create the tabs and define the theme with css file
                       navbarPage(
-                                  title = img(src="logo.png", 
-                                              width=320, 
-                                              hight= '40px', 
-                                              style="padding-left:5px;"), 
+                                  title = img(src="https://github.com/ZverM7/front_end/blob/main/www/logo.png?raw=true", 
+                                              width= "35%", 
+                                              #hight= '80px', 
+                                              style="padding-left:5px;padding-top:10px"), 
                                         # picture has to go in www folder
                                   id = "navbar",
                                   selected = "Home",
@@ -124,15 +146,11 @@ ui <- fluidPage(
                                         ),
                                         
                                         #Picture on the side
-                                          column(width = 6),
-                                              tags$figure(
-                                                align = "right",
-                                                tags$img(
-                                                  src = "home.jpg",
-                                                  width = "50%",
-                                                  height = "auto"
-                                                    )
-                                              )
+                                          column(width = 6,
+                                                  style="padding-top:50px; 
+                                                    background-image: url(https://github.com/ZverM7/front_end/blob/main/www/home.jpg?raw=true); 
+                                                    background-size:cover; padding-bottom:100%;",),
+                                            
                                  
                                             )
                                       ),
@@ -199,7 +217,7 @@ ui <- fluidPage(
                                                                   selected = "choice", 
                                                                   options = list(`live-search` = TRUE)),
                                                       
-                                                      textInput("quantityin2",NULL, 
+                                                      textInput("quantityin3",NULL, 
                                                                 placeholder = "e.g. 200" ),
                                                       
                                                       pickerInput(inputId = "unitin3",  
@@ -227,7 +245,7 @@ ui <- fluidPage(
                                                     tags$style(type='text/css', '#ingredout {background-color:#7AA95C; color: black;}'),
                                                     div(textOutput("ingredout"),
                                                                style= "padding-left:15%; padding-right:20%; 
-                                                                        padding-top: 10%; padding-bottom: 30px;",
+                                                                        padding-top: 0%; padding-bottom: 30px;",
                                                               align= "center")
                                                     
                                              ),
@@ -236,7 +254,7 @@ ui <- fluidPage(
                                              column(width = 6,
                                                     style="padding-top:50px; 
                                                     background-image: url(https://github.com/ZverM7/front_end/blob/main/www/calculator.jpg?raw=true); 
-                                                    background-size:cover; padding-bottom:100px;",
+                                                    background-size:cover; padding-bottom:100%;",
                                                     h2("Or paste the URL here."), 
                                                     
                                                     textInput("urlin", "URL",
@@ -251,7 +269,7 @@ ui <- fluidPage(
                                                                        label = 'CALCULATE', 
                                                                        style="background-color:#7AA95C; color:white"
                                                                     ),
-                                                        style = "padding-left:75%; padding-top: 43%; padding-bottom: 30px;"
+                                                        style = "padding-left:75%; padding-top: 33%; padding-bottom: 30px;"
                                                         ),
                                                     
                                                     # co2 score url
@@ -442,24 +460,29 @@ server <- function(input, output, session, e = "35.228.36.220", p="8080") {
 #Button Recommendations to Learn more
   pageButtonServer2("prova", parentSession = session) 
 
+#Button Calculator to Recommendations
+  #pageButtonServer3("rec", parentSession = session) 
+  
+  
 #add ingredients button
+  i<-3
   observeEvent(input$add_btn, {
     insertUI(
       selector = "#add_btn",
       where = "beforeBegin",
       ui = tags$div(div(
         style = "display: grid; 
-                                                      grid-template-columns: 30% repeat(3, 30%); 
-                                                      grid-gap: 10px;",
-        pickerInput(inputId = "textin4",  
+                          grid-template-columns: 30% repeat(3, 30%); 
+                          grid-gap: 10px;",
+        pickerInput(inputId = paste("textin", i+input$add_btn, sep = ""),  
                     choices = c("ingredient", "ackee", "acorn squash", "agave syrup", "all-purpose flour", "almond drink", "almonds", "anchovy", "anise", "apple", "apple juice", "apple vinegar", "apricot", "apricot", "artichoke", "arugula",  "avocado", "baby carrot", "baby corn", "baby peas", "baby spinach",  "bacon", "baking powder", "baking soda", "balsamic vinegar",  "banana", "banana squash", "barley", "barley", "barley", "barracuda",  "basa", "basil", "basil", "basmati rice", "bass", "bay leaves",  "bbq sauce", "beans", "beans", "beans", "beef", "beef broth", "beef cold cuts", "beef mince", "beer", "beetroot", "beetroot", "bell pepper", "bibb lettuce", "bitter melon", "black beans", "black beans", "black cod", "black-eyed beans", "blackberries", "blackcurrants", "blood orange", "blowfish", "blueberries", "blueberries",  "bluefish", "bok choy", "bombay duck", "borlotti beans", "borlotti beans", "boysenberries", "brandy", "bread baguette", "bream", "brill",  "broad beans", "broad beans", "broccoli", "brown lentils", "brown rice", "brown sugar", "brussel sprouts", "brussel sprouts", "bulgur", "burger bun", "butter", "butter fish", "buttermilk", "butternut squash", "cantaloupe", "caraway", "cardamom", "carrot", "cashew nuts", "catfish", "catnip", "cauliflower", "celeriac", "celery", "cheddar cheese", "cheese", "cheese emmentaler", "cherries", "cherry tomatoes", "chervil", "chestnuts", "chia seeds", "chicken", "chicken broth", "chicken cold cuts", "chicken nuggets", "chickpeas", "chickpeas", "chicory", "chili", "chives", "cilantro", "cinnamon", "clams",  "clementine", "cloudberries", "clove", "cockles", "cocoa beans", "cocoa powder", "coconut", "coconut milk", "coconut oil", "cod", "coffee", "coffee beans", "coffee powder", "cognac", "collard green", "corn", "corn", "corn", "corn", "corn kernel", "corn kernel", "corn kernel", "cornstarch", "cottonseed oil", "couscous", "crab", "crab apple", "cranberries", "crayfish", "cream", "cream cheese", "crispbread", "cucumber", "cumin", "curd cheese", "currants", "curry", "damson", "dark chocolate", "dates", "dates", "dates", "delicata squash", "dill", "dogfish", "dorade", "egg", "egg noodles",  "eggplant", "elderberries", "endive", "extravirgin olive oil", "fava beans", "fava beans", "fennel", "fig", "fish oil", "fish sauce",  "flounder", "french fries", "fuji apple", "full cream milk",  "full-fat margarine", "garlic", "gelatin", "gem squash", "ginger", "gnocchi", "goji berries", "gooseberries", "granulated sugar", "grapefruit", "grapes", "green asparagus", "green beans", "green beans", "green bell pepper", "green lentils", "green olives", "green onion", "grouper", "habanero", "haddock", "hake", "half-fat margarine",  "halibut", "ham", "hazelnuts", "herbs", "herring", "honey", "honeyberries", "honeydew", "horseradish", "hot dog", "hubbard squash", "ice","iceberg lettuce", "icing sugar", "jabuticabas", "jalapeno",  "jambul", "japanese plum", "jerusalem artichoke", "john dory", "jostaberries", "juniper berries", "kalamata olives", "kale", "kale", "ketchup", "kidney beans", "kidney beans", "kiwi", "kohlrabi","kumquat", "lamb", "lamb's lettuce", "langostino", "lasagna noodles", "leek", "lemon", "lemon balm", "lemon grass", "lemon juice","lemon zest", "lentils", "lentils", "lentils", "lettuce", "lime", "lingcod", "linguine", "linseed", "liquor", "low-fat curd cheese", "lupin flour", "macadamia nuts", "mackerel", "mahi mahi", "mandarine", "mango", "marionberries", "marjoram", "mayonnaise", "melon",  "milk", "milk chocolade", "millet", "mineral water", "mint", "miracle fruit", "mixed salad", "monkfish", "morel mushrooms",  "mozzarella", "mulberries", "mullet", "mung beans", "mung beans", "mushrooms", "mushrooms", "mussels", "mustard", "mustard leaves", "mustard seeds", "navy beans", "navy beans", "nectarine", "nutmeg", "oats", "oats drink", "okra", "olive oil", "olives", "onion", "onion powder", "orange", "orange juice", "orange peel",  "orange roughy", "oregano", "oregano", "oysters", "palm fruit",  "palm kernel oil", "palm oil", "panko", "papaya", "paprika",   "paris market carrot", "parmesan", "parsley", "passion fruit", "pasta", "pastry", "patagonian toothfish", "pea veggie burger", "peach", "peach", "peanut butter", "peanuts", "pear", "pearl barley",  "peas", "peas", "peas", "peas", "pecans", "pepper", "peppermint",  "perch", "philadelphia cream cheese", "pike", "pine nuts", "pineapple", "pineapple", "pineberries", "pinto beans", "pinto beans", "pistachios", "plum", "pollock", "pomfret", "pompano", "poppy seed", "porcini mushrooms", "pork", "portobello mushrooms", "potato", "potato", "potato",  "potato starch", "prawns", "puff pastry", "pumpkin", "quinoa",  "radish", "rape oil", "raspberries", "raspberries", "red bell pepper", "red cabbage", "red cabbage", "red chilli", "red meat", "red onion",  "red wine", "redcurrants", "rice", "ricotta", "rosemary", "runner beans",  "runner beans", "russet  potato", "russet  potato", "russet  potato", "rye", "rye", "rye", "saffron", "sage", "salal berries", "salmon",  "salmonberries", "salt", "sanddab", "sardine", "sausage", "savoy", "scallion", "scallops", "scampi", "schmand", "sea bass", "sea salt",  "sesame", "sesame oil", "shad", "shallot", "shiitake mushrooms", "shrimps", "skate", "skimmed milk", "sole", "sour cream", "soy curd",  "soy sauce", "soy veggie burger", "soybean drink", "soybean oil", "soybeans", "soybeans", "soybeans", "spaghetti squash", "spearmint",  "spelt drink", "spices", "spinach", "split peas", "split peas", "split peas", "sprat", "spring onion", "strawberries", "strawberries", "sturgeon", "sugar", "sugar snap peas", "sugar snap peas", "sugar snap peas", "sunflower oil", "sunflower seeds", "sunflower seeds", "surinam cherries","sweet potato", "sweet sorghum grain", "sweet sorghum stem",  "sweetcorn", "swordfish", "tabasco sauce", "tangerine", "tap water", "tarragon", "tawny port", "tea", "tempeh", "thuringian sausage", "thyme", "tilapia", "tilefish", "toast", "tofu", "tomato", "tomato", "tomatoes paste", "trout", "tuna", "turbot", "turmeric", "vanilin",  "vanilla", "vanilla extract", "vegan sausage", "vegan spreadable fat", "vegetable stock", "veggie nugget", "veggie patty", "venison", "walnuts", "wasabi", "watermelon", "wheat berries", "wheat bread", "wheat bread bun", "whey", "whipping cream", "white asparagus",  "white cabbage", "white chocolate", "white currants", "white radish", "white wine", "white wine vinegar", "whitebait", "whitefish",  "whiting", "wholegrain bread", "wholegrain bread bun", "wholegrain toast", "wholewheat flour", "wholewheat noodles", "wild mushrooms", "wild rice", "wine", "yeast", "yeast extract", "yellow bell pepper", "yogurt", "zucchini"), 
                     selected = "choice", 
                     options = list(`live-search` = TRUE)),
         
-        textInput("quantityin2",NULL, 
+        textInput(paste("quantityin", i+input$add_btn, sep = ""),NULL, 
                   placeholder = "e.g. 200" ),
         
-        pickerInput(inputId = "unitin4",  
+        pickerInput(inputId = paste("unitin", i+input$add_btn, sep = ""),  
                     choices = c("#", "bottle", "bunch", "bunches", "c", "can", "cans", "carton", "cartons", "cc", "centimeter", "centimeters", "centimetre", "centimetres", "chunk", "chunks", "cl", "cm", "cms", "cube", "cup", "cups", "dash", "dashes", "dc", "deci", "deciliter", "deciliters", "dl", "drop", "drops", "fl oz", "fl pt", "fl qt", "fluid ounce", "g",  "gal", "gallon", "gallons", "gill", "gram", "grams", "gs", "head", "inch", "inches", "jar", "jars", "jigger", "k", "kg", "kgs", "kilo", "kilogram", "kilogramme", "kilogrammes", "kilograms",  "kilos", "knob", "l", "lb", "lbs", "leaf", "leaves", "liter", "liters", "litre", "litres", "lts", "mg", "mgs", "milligram", "milligramme", "milligrammes", "milliliter", "milliliters", "millilitre", "millimeter", "millimeters", "millimetre", "millimetres", "ml",  "mls", "mm", "ounce", "ounces", "oz", "p", "package", "packages",  "packet", "packets", "piece", "pieces", "pinch", "pinches", "pint",  "pints", "pkt", "pod", "pods", "portion", "portions", "pound",  "pounds", "pt", "q", "qt", "quart", "sachet", "sachets", "scoop",  "scoops", "sheet", "sheets", "sized", "slice", "slices", "sprig", "sprigs", "stalk", "stalks", "stick", "sticks", "strip", "strips",  "t", "tablespoon", "tablespoons", "tbl", "tbs", "tbsp", "teaspoon", "teaspoons", "tin", "tsp", "wedge", "wedges"), 
                     selected = "choose", 
                     options = list(`live-search` = TRUE)),
@@ -469,20 +492,42 @@ server <- function(input, output, session, e = "35.228.36.220", p="8080") {
       
 #co2 score from ingredients
   observeEvent(input$btn2, {
-    output$ingredout <- renderText({ 
-      "#backend"
-      #paste(input$textin, input$textin2, input$textin3)
-      })
+    
     #pickerinput as datatable
-   #pidt <- data.table("Ingredient" = c(input$textin, input$textin2, input$textin3),    
-                      #"Quantity" = double(),
-                      #"Unit" = character())
+    df<-data.frame("ingredients" = c(input$textin, input$textin2, input$textin3, input$textin4, input$textin5,
+                                    input$textin6, input$textin7, input$textin8, input$textin9, input$textin10, 
+                                    input$textin11, input$textin12), 
+                   "quantity" = c(input$quantityin, input$quantityin2, input$quantityin3, input$quantityin4, 
+                                  input$quantityin5, input$quantityin6, input$quantityin7, input$quantityin8,
+                                  input$quantityin9, input$quantityin10, input$quantityin11, input$quantityin12), 
+                   "unit" = c(input$unitin, input$unitin2, input$unitin3, input$unitin4, input$unitin5, input$unitin6, 
+                             input$unitin7, input$unitin8,input$unitin9, input$unitin10, input$unitin11, input$unitin12))
+    write_csv(df, "~/Documents/UZH/Prototyping Data Science Products/app/test_safe.csv")
+    
+    #connection to the backend
+    output$ingredout <- renderText({ 
+      base = paste0("http://", e,":", p,"/")
+      r <- httr::GET(url=base,
+                     path="get_table",
+                     query=list(foodlink=df), verbose()
+      )
+      fromJSON(content(r, "text"))
+      })
+    #insert button to get recommendations
+    #insertUI(
+     # selector = "#btn2",
+      #multiple = FALSE,
+      #where = "afterEnd",
+      #ui = div(pageButtonUi3("rec"),
+       # style = "padding-right:50%; padding-top: 10%; padding-bottom: 0px;"))
+    
 })
 
     
 #url 
   observeEvent(input$btn3, {
     output$urlout <- renderText({
+      #"your CO2 score is"
      base = paste0("http://", e,":", p,"/")
      r <- httr::GET(url=base,
                     path="get_table",
@@ -500,6 +545,9 @@ server <- function(input, output, session, e = "35.228.36.220", p="8080") {
 
 # Run the application 
 shinyApp(ui = ui, server = server)
-  
+
+################################################
+
+
 }
 
