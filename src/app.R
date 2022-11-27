@@ -116,7 +116,7 @@ ui <- fluidPage(
                       navbarPage(
                                   title = img(src="https://github.com/ZverM7/front_end/blob/main/www/logo.png?raw=true", 
                                               width= "35%", 
-                                              #hight= '80px', 
+                                              #height= '70px', 
                                               style="padding-left:5px;padding-top:10px"), 
                                         # picture has to go in www folder
                                   id = "navbar",
@@ -141,7 +141,7 @@ ui <- fluidPage(
                                         
                                         #Button to calculater page
                                             div(pageButtonUi("navbar"),
-                                                style = "padding-left: 53%; padding-top: 20%"),
+                                                style = "padding-left: 54%; padding-top: 20%"),
                                           
                                         ),
                                         
@@ -149,7 +149,7 @@ ui <- fluidPage(
                                           column(width = 6,
                                                   style="padding-top:50px; 
                                                     background-image: url(https://github.com/ZverM7/front_end/blob/main/www/home.jpg?raw=true); 
-                                                    background-size:cover; padding-bottom:50%;",),
+                                                    background-size:cover; padding-bottom:70%;",),
                                             
                                  
                                             )
@@ -237,7 +237,7 @@ ui <- fluidPage(
                                                     # ingredients calculate button
                                                     div(actionButton('btn2',"CALCULATE", 
                                                                         style="color:white; background-color:#7AA95C"),
-                                                        style = "padding-left:75%; padding-top: 10%; padding-bottom: 30px;" ),
+                                                        style = "padding-left:72%; padding-top: 5%; padding-bottom: 5px;" ),
                                                     
                                                     
                                                     
@@ -245,7 +245,7 @@ ui <- fluidPage(
                                                     tags$style(type='text/css', '#ingredout {background-color:#7AA95C; color: black;}'),
                                                     div(textOutput("ingredout"),
                                                                style= "padding-left:15%; padding-right:20%; 
-                                                                        padding-top: 0%; padding-bottom: 30px;",
+                                                                        padding-top: 3%; padding-bottom: 30px;",
                                                               align= "center")
                                                     
                                              ),
@@ -254,8 +254,10 @@ ui <- fluidPage(
                                              column(width = 6,
                                                     style="padding-top:50px; 
                                                     background-image: url(https://github.com/ZverM7/front_end/blob/main/www/calculator.jpg?raw=true); 
-                                                    background-size:cover; padding-bottom:100%;",
-                                                    h2("Or paste the URL here."), 
+                                                    background-size:cover; padding-bottom:70%;",
+                                                    h2("Or paste the URL on the recommendations page."), 
+                                                    h4("If you want to get the CO2 score of your recipe and get recommendations on how 
+                                                       to eat greener go to the recommendation page by clicking the button below."),
                                                     
                                                     #textInput("urlin", "URL",
                                                     #          placeholder = "https://www...", 
@@ -265,19 +267,19 @@ ui <- fluidPage(
                                                     
                                                     # url calculate button
                                                     
-                                                    div(actionButton('btn3', 
-                                                                       label = 'CALCULATE', 
-                                                                       style="background-color:#7AA95C; color:white"
-                                                                    ),
-                                                        style = "padding-left:75%; padding-top: 33%; padding-bottom: 30px;"
-                                                        ),
+                                                    #div(actionButton('btn3', 
+                                                                     #  label = 'CALCULATE', 
+                                                                     #  style="background-color:#7AA95C; color:white"
+                                                                    #),
+                                                        #style = "padding-left:75%; padding-top: 33%; padding-bottom: 30px;"
+                                                        #),
                                                     
                                                     # co2 score url
-                                                    tags$style(type='text/css', '#urlout {background-color:#7AA95C; color: black;}'),
-                                                    div(textOutput("urlout"),
-                                                        style = "padding-left:15%; padding-right:20%; 
-                                                                 padding-top: 10%; padding-bottom: 30px;",
-                                                        align= "center"),
+                                                    #tags$style(type='text/css', '#urlout {background-color:#7AA95C; color: black;}'),
+                                                    #div(textOutput("urlout"),
+                                                     #   style = "padding-left:15%; padding-right:20%; 
+                                                      #           padding-top: 10%; padding-bottom: 30px;",
+                                                      #  align= "center"),
                                                  
                                                      )
                                                 
@@ -294,14 +296,14 @@ ui <- fluidPage(
                                               tags$style("label{font-size:10px;height:10px;}")
                                              ),
                                             column(width = 6,
-                                                   h2("Paste your URL here to get recommendations.", 
-                                                      style= "padding-top:20%; padding-bottom: 0%;"), 
+                                                   h2("Paste your URL here.", 
+                                                      style= "padding-top:50px; padding-bottom: 0%;"), 
                                                    
                                                    div(textInput("urlinR", "URL",
                                                              placeholder = "https://www...", 
                                                              #value="https://www.food.com/recipe/pretty-freaking-awesome-pulled-pork-crock-pot-484624",
-                                                             width = "90%"),
-                                                             style = "padding-left:10%"),
+                                                             width = "100%"),
+                                                             align = "left"),
                                                    
                                                    
                                                    # url calculate button
@@ -310,7 +312,7 @@ ui <- fluidPage(
                                                                     label = 'CALCULATE', 
                                                                     style="background-color:#7AA95C; color:white"
                                                    ),
-                                                   style = "padding-left:40%; padding-top: 0%; padding-bottom: 30px;"
+                                                   style = "padding-left:70%; padding-top: 0%; padding-bottom: 30px;"
                                                    ),
                                                    
                                                    
@@ -368,7 +370,7 @@ ui <- fluidPage(
                                                    
                                                    pickerInput(inputId = "varietyR", 
                                                                label = "Variety", 
-                                                               choices = df$variety, 
+                                                               choices = c("canned","frozen", "fresh", "dry", "glass"), 
                                                                selected = NULL, 
                                                                options = list(`live-search` = TRUE)),
                                                    
@@ -562,6 +564,5 @@ observeEvent(input$textinR, {
 shinyApp(ui = ui, server = server)
 
 ################################################
-
 }
 
