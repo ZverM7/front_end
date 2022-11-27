@@ -368,7 +368,7 @@ ui <- fluidPage(
                                                    
                                                    #placeholder for CO2 score
                                                    div(tableOutput("tableL"),
-                                                      style = "font-size:20%" )
+                                                      style = "font-size:100%" )
                                                    
                                                  
                                                  #placeholder for relative CO2 score
