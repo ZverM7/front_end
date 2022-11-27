@@ -115,7 +115,7 @@ ui <- fluidPage(
   #navigation tabs: create the tabs and define the theme with css file
                       navbarPage(
                                   title = div(img(src="https://github.com/ZverM7/front_end/blob/main/www/logo.png?raw=true", 
-                                              width= "35%"),
+                                              width= "15%"),
                                               align="right",
                                               #height= '70px', 
                                               style="padding-left:5px;padding-top:10px"), 
