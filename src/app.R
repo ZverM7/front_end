@@ -114,8 +114,8 @@ ui <- fluidPage(
     
   #navigation tabs: create the tabs and define the theme with css file
                       navbarPage(
-                                  title = img(src="https://github.com/ZverM7/front_end/blob/main/www/logo.png?raw=true", 
-                                              width= "35%", 
+                                  title = div(img(src="https://github.com/ZverM7/front_end/blob/main/www/logo.png?raw=true", 
+                                              width= "35%"), 
                                               #height= '70px', 
                                               style="padding-left:5px;padding-top:10px"), 
                                         # picture has to go in www folder
@@ -237,12 +237,13 @@ ui <- fluidPage(
                                                     # ingredients calculate button
                                                     div(actionButton('btn2',"CALCULATE", 
                                                                         style="color:white; background-color:#7AA95C"),
-                                                        style = "padding-left:72%; padding-top: 5%; padding-bottom: 5px;" ),
+                                                        style = "padding-top: 5%; padding-bottom: 5px;",
+                                                        align = "right"),
                                                     
                                                     
                                                     
                                                     #Score output
-                                                    tags$style(type='text/css', '#ingredout {background-color:#7AA95C; color: black;}'),
+                                                    tags$style(type='text/css', '#ingredout {color:#7AA95C;}'),
                                                     div(textOutput("ingredout"),
                                                                style= "padding-left:15%; padding-right:20%; 
                                                                         padding-top: 3%; padding-bottom: 30px;",
@@ -260,14 +261,11 @@ ui <- fluidPage(
                                                        to eat greener go to the recommendation page by clicking the button below."),
                                                     
                                                     div(pageButtonUi3("rec"),
-                                                        style = "padding-left:50%; padding-top: 10%; padding-bottom: 0px;")
+                                                        style = "padding-top: 30%; padding-bottom: 0px;",
+                                                        align = "right")
                                                  
                                                      )
-                                                
-                                                    
-                                           
-                                                    
-                                                    
+
                                                     )
                                            ),
                         #Recommendations page              ############################################################## 
@@ -278,7 +276,7 @@ ui <- fluidPage(
                                              ),
                                             column(width = 6,
                                                    h2("Paste your URL here.", 
-                                                      style= "padding-top:50px; padding-bottom: 0%;"), 
+                                                      style= "padding-top:50px; padding-bottom: 0%;"),
                                                    
                                                    div(textInput("urlin", "URL",
                                                              placeholder = "https://www...", 
@@ -293,11 +291,13 @@ ui <- fluidPage(
                                                                     label = 'CALCULATE', 
                                                                     style="background-color:#7AA95C; color:white"
                                                    ),
-                                                   style = "padding-left:70%; padding-top: 0%; padding-bottom: 30px;"
+                                                   align= "right"
                                                    ),
                                                    
+                                                   tags$style(type='text/css', '#urlout {color: #7AA95C;}'),
                                                    div(textOutput("urlout"),
-                                                       style = "padding-left:5%; padding-right:10%; padding-top: 5px;")
+                                                       style = "padding-left:5%; padding-right:10%; padding-top: 5px;",
+                                                       align= "center")
                                                    
                                            ),
                                            column(width = 6,
@@ -308,7 +308,7 @@ ui <- fluidPage(
                                                      style="padding-top:50px;"
                                                      ),
                                                   # co2 score url
-                                                  tags$style(type='text/css', '#urlout {background-color:#7AA95C; color: black;}'),
+                                                  tags$style(type='text/css', '#urloutR {color: #7AA95C;}'),
                                                   div(textOutput("urloutR"),
                                                       style = "padding-left:15%; padding-right:20%; 
                                                                  padding-top: 10%; padding-bottom: 0px;",
@@ -316,7 +316,8 @@ ui <- fluidPage(
                                                  
                                                    #Button to learn more page
                                                   div(pageButtonUi2("prova"),
-                                                      style = "padding-left:70%; padding-top: 10%; padding-bottom: 250px;"),
+                                                      style = "padding-top: 10%; padding-bottom: 250px;",
+                                                      align = "right"),
                                                   
                                                   
                                            ),
@@ -366,8 +367,7 @@ ui <- fluidPage(
                                                    
                                                    #placeholder for CO2 score
                                                    div(tableOutput("tableL"),
-                                                       height= "100px", 
-                                                       width= "10px")
+                                                      style = "font-size:20%" )
                                                    
                                                  
                                                  #placeholder for relative CO2 score
@@ -490,13 +490,12 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
 #url 
   observeEvent(input$btnR, {
     output$urlout <- renderText({
-      #paste("your CO2 score is")
      base = paste0("http://", e,":", p,"/")
      r <- httr::GET(url=base,
                     path="get_score",
                     query=list(foodlink=input$urlin), verbose()
                     )
-     fromJSON(content(r, "text"))
+     paste("Your CO2 score is:",fromJSON(content(r, "text")))
    }) 
    })
   
@@ -522,7 +521,11 @@ observeEvent(input$textinR, {
                    query=list(dash_ing = input$textinR), verbose()
     )
     fromJSON(content(r, "text"))
-  }) 
+  },
+  bordered = TRUE,
+  spacing = "xs",
+  width = "10%"
+  ) 
 })
 }
 #############################################################################
