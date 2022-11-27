@@ -297,7 +297,7 @@ ui <- fluidPage(
                                                    ),
                                                    
                                                    div(textOutput("urlout"),
-                                                       style = "padding-left:25%; padding-top: 40px;")
+                                                       style = "padding-left:5%; padding-right:10%; padding-top: 5px;")
                                                    
                                            ),
                                            column(width = 6,
@@ -365,7 +365,9 @@ ui <- fluidPage(
                                                                options = list(`live-search` = TRUE))),
                                                    
                                                    #placeholder for CO2 score
-                                                   tableOutput("tableL"),
+                                                   div(tableOutput("tableL"),
+                                                       height= "100px", 
+                                                       width= "10px")
                                                    
                                                  
                                                  #placeholder for relative CO2 score
@@ -486,7 +488,7 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
 
     
 #url 
-  observeEvent(input$btn3, {
+  observeEvent(input$btnR, {
     output$urlout <- renderText({
       #paste("your CO2 score is")
      base = paste0("http://", e,":", p,"/")
