@@ -259,27 +259,7 @@ ui <- fluidPage(
                                                     h4("If you want to get the CO2 score of your recipe and get recommendations on how 
                                                        to eat greener go to the recommendation page by clicking the button below."),
                                                     
-                                                    #textInput("urlin", "URL",
-                                                    #          placeholder = "https://www...", 
-                                                              #value="https://www.food.com/recipe/pretty-freaking-awesome-pulled-pork-crock-pot-484624",
-                                                    #         width = "100%"),
                                                     
-                                                    
-                                                    # url calculate button
-                                                    
-                                                    #div(actionButton('btn3', 
-                                                                     #  label = 'CALCULATE', 
-                                                                     #  style="background-color:#7AA95C; color:white"
-                                                                    #),
-                                                        #style = "padding-left:75%; padding-top: 33%; padding-bottom: 30px;"
-                                                        #),
-                                                    
-                                                    # co2 score url
-                                                    #tags$style(type='text/css', '#urlout {background-color:#7AA95C; color: black;}'),
-                                                    #div(textOutput("urlout"),
-                                                     #   style = "padding-left:15%; padding-right:20%; 
-                                                      #           padding-top: 10%; padding-bottom: 30px;",
-                                                      #  align= "center"),
                                                  
                                                      )
                                                 
@@ -315,12 +295,14 @@ ui <- fluidPage(
                                                    style = "padding-left:70%; padding-top: 0%; padding-bottom: 30px;"
                                                    ),
                                                    
+                                                   div(textOutput("urlout"),
+                                                       style = "padding-left:25%; padding-top: 40px")
                                                    
                                            ),
                                            column(width = 6,
                                                   style=" 
                                                     background-image: url(https://github.com/ZverM7/front_end/blob/main/www/recommendations.jpg?raw=true); 
-                                                    background-size:cover;",
+                                                    background-size:cover; padding-bottom:50%;",
                                                   h2("Our recommendations for you...",
                                                      style="padding-top:50px;"
                                                      ),
@@ -385,18 +367,6 @@ ui <- fluidPage(
                                                    tableOutput("tableL"),
                                                    
                                                  
-                                                   #h4("See the overview about the ingredient’s relative CO2 scores
-                                                     #  based on variety and certification",
-                                                     # style="padding-top:20px;"),
-                                                
-                                                 
-                                          
-                                                # Placeholder pie charts
-                                                # fig1,
-                                                # fig2,
-                                                    
-                                                
-                                                 
                                                  #placeholder for relative CO2 score
                                         
                                           ),
@@ -451,7 +421,7 @@ ui <- fluidPage(
 #source_python("get_recommendation_connect.py")
 
 # Define server logic 
-server <- function(input, output, session, e = "35.228.16.65", p="8080") {
+server <- function(input, output, session, e = "35.228.36.220", p="8080") {
   
 
 #Button Homepage to calculator
