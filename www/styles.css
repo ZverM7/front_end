@@ -6,6 +6,7 @@
     -moz-transition: padding .3s;
     transition: padding .3s;
     border: none;
+    float: right;
 }
 
 .navbar .navbar-nav {
