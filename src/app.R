@@ -110,6 +110,7 @@ pageButtonServer3 <- function(id, parentSession) {
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
+  includeCSS("www/styles.css"),
           titlePanel(
     
   #navigation tabs: create the tabs and define the theme with css file
