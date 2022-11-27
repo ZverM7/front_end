@@ -120,7 +120,6 @@ ui <- fluidPage(
                                               style="padding-left:5px;padding-top:10px; padding-right:100px"), 
                                         # picture has to go in www folder
                                   id = "navbar",
-                                  align = "right",
                                   selected = "Home",
                                   position = "static-top",
                                   theme = "styles.css",
