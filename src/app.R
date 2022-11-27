@@ -117,7 +117,7 @@ ui <- fluidPage(
                                   title = div(img(src="https://github.com/ZverM7/front_end/blob/main/www/logo.png?raw=true", 
                                               width= "35%"), 
                                               #height= '70px', 
-                                              style="padding-left:5px;padding-top:10px"), 
+                                              style="padding-left:5px;padding-top:10px; padding-right:100px"), 
                                         # picture has to go in www folder
                                   id = "navbar",
                                   selected = "Home",
