@@ -493,7 +493,7 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
       #paste("your CO2 score is")
      base = paste0("http://", e,":", p,"/")
      r <- httr::GET(url=base,
-                    path="get_table",
+                    path="get_score",
                     query=list(foodlink=input$urlin), verbose()
                     )
      fromJSON(content(r, "text"))
