@@ -259,7 +259,8 @@ ui <- fluidPage(
                                                     h4("If you want to get the CO2 score of your recipe and get recommendations on how 
                                                        to eat greener go to the recommendation page by clicking the button below."),
                                                     
-                                                    
+                                                    div(pageButtonUi3("rec"),
+                                                        style = "padding-left:50%; padding-top: 10%; padding-bottom: 0px;")
                                                  
                                                      )
                                                 
@@ -279,7 +280,7 @@ ui <- fluidPage(
                                                    h2("Paste your URL here.", 
                                                       style= "padding-top:50px; padding-bottom: 0%;"), 
                                                    
-                                                   div(textInput("urlinR", "URL",
+                                                   div(textInput("urlin", "URL",
                                                              placeholder = "https://www...", 
                                                              #value="https://www.food.com/recipe/pretty-freaking-awesome-pulled-pork-crock-pot-484624",
                                                              width = "100%"),
@@ -296,13 +297,13 @@ ui <- fluidPage(
                                                    ),
                                                    
                                                    div(textOutput("urlout"),
-                                                       style = "padding-left:25%; padding-top: 40px")
+                                                       style = "padding-left:25%; padding-top: 40px;")
                                                    
                                            ),
                                            column(width = 6,
                                                   style=" 
                                                     background-image: url(https://github.com/ZverM7/front_end/blob/main/www/recommendations.jpg?raw=true); 
-                                                    background-size:cover; padding-bottom:50%;",
+                                                    background-size:cover; padding-bottom:40%;",
                                                   h2("Our recommendations for you...",
                                                      style="padding-top:50px;"
                                                      ),
@@ -431,7 +432,7 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
   pageButtonServer2("prova", parentSession = session) 
 
 #Button Calculator to Recommendations
-  #pageButtonServer3("rec", parentSession = session) 
+  pageButtonServer3("rec", parentSession = session) 
   
   
 #add ingredients button
@@ -479,13 +480,7 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
       )
       fromJSON(content(r, "text"))
     })
-    #insert button to get recommendations
-    #insertUI(
-    # selector = "#btn2",
-    #multiple = FALSE,
-    #where = "afterEnd",
-    #ui = div(pageButtonUi3("rec"),
-    # style = "padding-right:50%; padding-top: 10%; padding-bottom: 0px;"))
+    
     
   })
 
@@ -493,7 +488,7 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
 #url 
   observeEvent(input$btn3, {
     output$urlout <- renderText({
-      #"your CO2 score is"
+      #paste("your CO2 score is")
      base = paste0("http://", e,":", p,"/")
      r <- httr::GET(url=base,
                     path="get_table",
