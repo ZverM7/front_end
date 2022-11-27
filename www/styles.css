@@ -1,6 +1,6 @@
 /* navbar */
 
-navbar {
+.navbar {
     background-color: #FFF;
     -webkit-transition: padding .3s;
     -moz-transition: padding .3s;
@@ -9,7 +9,7 @@ navbar {
     float: right;
 }
 
-navbar .navbar-nav {
+.navbar .navbar-nav {
     float: right;
     padding-right: 5px;
     padding-top: 30px;
