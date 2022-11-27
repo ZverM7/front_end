@@ -421,7 +421,7 @@ ui <- fluidPage(
 #source_python("get_recommendation_connect.py")
 
 # Define server logic 
-server <- function(input, output, session, e = "35.228.36.220", p="8080") {
+server <- function(input, output, session, e = "35.228.16.65", p="8080") {
   
 
 #Button Homepage to calculator
