@@ -466,19 +466,26 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
       
   #co2 score from ingredients
   observeEvent(input$btn2, {
-    
-    #ings <- c(input$textin, input$textin2, input$textin3, input$textin4, input$textin5,input$textin6, input$textin7, input$textin8, input$textin9, input$textin10, input$textin11, input$textin12)
-    #quants <- c(input$quantityin, input$quantityin2, input$quantityin3, input$quantityin4, input$quantityin5, input$quantityin6, input$quantityin7, input$quantityin8, input$quantityin9, input$quantityin10, input$quantityin11, input$quantityin12)
-    #measurs <- c(input$unitin, input$unitin2, input$unitin3, input$unitin4, input$unitin5, input$unitin6, input$unitin7, input$unitin8,input$unitin9, input$unitin10, input$unitin11, input$unitin12)
-    
+
     #connection to the backend
     output$ingredout <- renderText({ 
       base = paste0("http://", e,":", p,"/")
       r <- httr::GET(url=base,
                      path="get_score_manual",
-                     query=list(list_ing=input$textin,list_ing=input$textin2, list_ing=input$textin3 , list_quant=input$quantityin,
-                                list_quant=input$quantityin2, list_quant=input$quantityin3, list_meas=input$unitin, 
-                                list_meas=input$unitin2, list_meas=input$unitin3), 
+                     query=list(list_ing=input$textin,list_ing=input$textin2, list_ing=input$textin3 , list_ing=input$textin4, 
+                                list_ing=input$textin5,list_ing=input$textin5, list_ing=input$textin6, list_ing=input$textin7,
+                                list_ing=input$textin8, list_ing=input$textin9, list_ing=input$textin10, list_ing=input$textin11, 
+                                list_ing=input$textin12, list_ing=input$textin13, list_ing=input$textin14, list_ing=input$textin15,
+                                list_quant=input$quantityin, list_quant=input$quantityin2, list_quant=input$quantityin3, 
+                                list_quant=input$quantityin4, list_quant=input$quantityin5, list_quant=input$quantityin6,
+                                list_quant=input$quantityin7, list_quant=input$quantityin8, list_quant=input$quantityin9, 
+                                list_quant=input$quantityin10, list_quant=input$quantityin11,list_quant=input$quantityin12,
+                                list_quant=input$quantityin13, list_quant=input$quantityin14, list_quant=input$quantityin15,
+                                list_meas=input$unitin, list_meas=input$unitin2, list_meas=input$unitin3, list_meas=input$unitin4, 
+                                list_meas=input$unitin5, list_meas=input$unitin6, list_meas=input$unitin7, list_meas=input$unitin8,
+                                list_meas=input$unitin9, list_meas=input$unitin10, list_meas=input$unitin11, list_meas=input$unitin12,
+                                list_meas=input$unitin13, list_meas=input$unitin14, list_meas=input$unitin15
+                                ), 
                      verbose()
       )
       fromJSON(content(r, "text"))
