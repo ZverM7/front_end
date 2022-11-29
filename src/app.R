@@ -128,6 +128,8 @@ ui <- fluidPage(
                       #Home page              ##############################################################           
                               tabPanel("Home",
                                       fixedRow(
+                                        
+                                      #1.column
                                           column(width= 6,
                                                 h2("Make sustainable choices.", 
                                                 align="left",
@@ -140,17 +142,19 @@ ui <- fluidPage(
                                                 style="padding-top:40px; padding-right:80px;"
                                                 ),
                                         
-                                        #Button to calculater page
+                                          #Button to calculater page
                                             div(pageButtonUi("navbar"),
-                                                style = "padding-left: 54%; padding-top: 20%"),
+                                                style = "padding-top: 20%",
+                                                align = "right"),
                                           
-                                        ),
+                                              ),
                                         
-                                        #Picture on the side
+                                      #2.column
                                           column(width = 6,
                                                   style="padding-top:50px; 
                                                     background-image: url(https://github.com/ZverM7/front_end/blob/main/www/home.jpg?raw=true); 
-                                                    background-size:cover; padding-bottom:70%;",),
+                                                    background-size:cover; padding-bottom:70%;"
+                                                 ),
                                             
                                  
                                             )
@@ -162,9 +166,9 @@ ui <- fluidPage(
                                              tags$head(
                                                tags$style("label{font-size:10px;height:10px;}")
                                              ),
-                                             #tags$style("[type = 'text'] {font-size:10px;height:20px;}"),
                                              
-                                             # input 
+                                             
+                                        #1.column 
                                              column(width = 6,
                                                     h2("Type your ingredients here.",
                                                        style="padding-top:50px;"
@@ -241,28 +245,41 @@ ui <- fluidPage(
                                                         style = "padding-top: 5%; padding-bottom: 5px;",
                                                         align = "right"),
                                                     
-                                                    
+                                                    #your score is output 
+                                                    tags$style(type='text/css', '#ingredout1 {color:#7AA95C;}'),
+                                                    div(textOutput("ingredout1"),
+                                                                style= "padding-left:15%; 
+                                                                        padding-right:15%;",
+                                                                align= "center"),
                                                     
                                                     #Score output
-                                                    tags$style(type='text/css', '#ingredout {color:#7AA95C;}'),
+                                                    tags$style(type='text/css', '#ingredout {color:#7AA95C;
+                                                               background-image: url(https://github.com/ZverM7/front_end/blob/main/www/cloud.jpg?raw=true);
+                                                               background-size:cover; height: 20%}'),
                                                     div(textOutput("ingredout"),
-                                                               style= "padding-left:15%; padding-right:20%; 
-                                                                        padding-top: 3%; padding-bottom: 30px;",
+                                                               style= "padding-left:15%; 
+                                                                        padding-right:15%; 
+                                                                        padding-top: 10%;
+                                                                        padding-bottom: 20%;",
                                                               align= "center")
                                                     
                                              ),
                                              
-                                             
+                                        #2.column 
                                              column(width = 6,
                                                     style="padding-top:50px; 
                                                     background-image: url(https://github.com/ZverM7/front_end/blob/main/www/calculator.jpg?raw=true); 
-                                                    background-size:cover; padding-bottom:70%;",
+                                                    background-size:cover; 
+                                                    padding-bottom:70%;",
+                                                    
                                                     h2("Or paste the URL on the recommendations page."), 
+                                                    
                                                     h4("If you want to get the CO2 score of your recipe and get recommendations on how 
-                                                       to eat greener go to the recommendation page by clicking the button below."),
+                                                       to eat greener go to the recommendation page by clicking the button below.",
+                                                        style="padding-top: 50px;"),
                                                     
                                                     div(pageButtonUi3("rec"),
-                                                        style = "padding-top: 30%; padding-bottom: 0px;",
+                                                        style = "padding-top: 15%;",
                                                         align = "right")
                                                  
                                                      )
@@ -275,6 +292,8 @@ ui <- fluidPage(
                                              tags$head(
                                               tags$style("label{font-size:10px;height:10px;}")
                                              ),
+                                        
+                                        #1.column   
                                             column(width = 6,
                                                    h2("Paste your URL here.", 
                                                       style= "padding-top:50px; padding-bottom: 0%;"),
@@ -286,36 +305,53 @@ ui <- fluidPage(
                                                              align = "left"),
                                                    
                                                    
-                                                   # url calculate button
-                                                   
+                                                # url calculate button
                                                    div(actionButton('btnR', 
                                                                     label = 'CALCULATE', 
-                                                                    style="background-color:#7AA95C; color:white"
-                                                   ),
-                                                   align= "right"
-                                                   ),
-                                                   
-                                                   tags$style(type='text/css', '#urlout {color: #7AA95C;}'),
+                                                                    style="background-color:#7AA95C; color:white"),
+                                                                    align= "right"
+                                                      ),
+                                                
+                                                #Text output  
+                                                  tags$style(type='text/css', '#urlout1 {color: #7AA95C;}'),
+                                                  div(textOutput("urlout1"),
+                                                      style = "padding-left:15%; 
+                                                                padding-right:15%; 
+                                                                padding-top: 5px; 
+                                                                ",
+                                                      align= "center"),
+                                                
+                                                #Co2 score output url
+                                                   tags$style(type='text/css', '#urlout {color: #7AA95C;
+                                                              background-image: url(https://github.com/ZverM7/front_end/blob/main/www/cloud.jpg?raw=true);
+                                                              background-size:cover; margin-bottom: 40px;}'),
                                                    div(textOutput("urlout"),
-                                                       style = "padding-left:5%; padding-right:10%; padding-top: 5px;",
+                                                       style = "padding-left:15%; 
+                                                                padding-right:15%;
+                                                                padding-bottom:20%;
+                                                                padding-top:10%;
+                                                                vertical-align: middle;",
                                                        align= "center")
+                                                  
                                                    
                                            ),
+                                           
+                                        #2.column  
                                            column(width = 6,
-                                                  style=" 
+                                                  style= "padding-top:50px; 
                                                     background-image: url(https://github.com/ZverM7/front_end/blob/main/www/recommendations.jpg?raw=true); 
-                                                    background-size:cover; padding-bottom:40%;",
-                                                  h2("Our recommendations for you...",
-                                                     style="padding-top:50px;"
-                                                     ),
-                                                  # co2 score url
+                                                    background-size:cover; 
+                                                    padding-bottom:40%;",
+                                                  
+                                                  h2("Our recommendations for you..."),
+                                            
+                                              # recommendations output url
                                                   tags$style(type='text/css', '#urloutR {color: #7AA95C;}'),
                                                   div(textOutput("urloutR"),
-                                                      style = "padding-left:15%; padding-right:20%; 
-                                                                 padding-top: 10%; padding-bottom: 0px;",
+                                                      style = "white-space:pre-wrap;",
                                                       align= "center"),
                                                  
-                                                   #Button to learn more page
+                                            #Button to learn more page
                                                   div(pageButtonUi2("prova"),
                                                       style = "padding-top: 10%; padding-bottom: 250px;",
                                                       align = "right"),
@@ -336,39 +372,25 @@ ui <- fluidPage(
                                                  h2("Discover more about food emissions",
                                                     style="padding-top:50px;"
                                                  ),
-                                                 h4("Type an ingredient and select from the drop down menus its 
-                                                    variety and certification, and see how the score changes!", 
+                                                 h4("Type an ingredient and select from the drop down menu and see how the score changes!", 
                                                     style="padding-top:40px; padding-right:0px;"),
                                                  
                                                  #ingredient input
                                                  
                                                  div(
-                                                   style = "display: grid; 
-                                                      grid-template-columns: 25% repeat(3, 30%); 
-                                                      grid-gap: 10px; padding-top:0px;",
+                                                   
                                                    
                                                    pickerInput(inputId = "textinR", 
                                                                label = "Ingredients", 
-                                                               choices = c("ingredient", "ackee", "acorn squash", "agave syrup", "all-purpose flour", "almond drink", "almonds", "anchovy", "anise", "apple", "apple juice", "apple vinegar", "apricot", "apricot", "artichoke", "arugula",  "avocado", "baby carrot", "baby corn", "baby peas", "baby spinach",  "bacon", "baking powder", "baking soda", "balsamic vinegar",  "banana", "banana squash", "barley", "barley", "barley", "barracuda",  "basa", "basil", "basil", "basmati rice", "bass", "bay leaves",  "bbq sauce", "beans", "beans", "beans", "beef", "beef broth", "beef cold cuts", "beef mince", "beer", "beetroot", "beetroot", "bell pepper", "bibb lettuce", "bitter melon", "black beans", "black beans", "black cod", "black-eyed beans", "blackberries", "blackcurrants", "blood orange", "blowfish", "blueberries", "blueberries",  "bluefish", "bok choy", "bombay duck", "borlotti beans", "borlotti beans", "boysenberries", "brandy", "bread baguette", "bream", "brill",  "broad beans", "broad beans", "broccoli", "brown lentils", "brown rice", "brown sugar", "brussel sprouts", "brussel sprouts", "bulgur", "burger bun", "butter", "butter fish", "buttermilk", "butternut squash", "cantaloupe", "caraway", "cardamom", "carrot", "cashew nuts", "catfish", "catnip", "cauliflower", "celeriac", "celery", "cheddar cheese", "cheese", "cheese emmentaler", "cherries", "cherry tomatoes", "chervil", "chestnuts", "chia seeds", "chicken", "chicken broth", "chicken cold cuts", "chicken nuggets", "chickpeas", "chickpeas", "chicory", "chili", "chives", "cilantro", "cinnamon", "clams",  "clementine", "cloudberries", "clove", "cockles", "cocoa beans", "cocoa powder", "coconut", "coconut milk", "coconut oil", "cod", "coffee", "coffee beans", "coffee powder", "cognac", "collard green", "corn", "corn", "corn", "corn", "corn kernel", "corn kernel", "corn kernel", "cornstarch", "cottonseed oil", "couscous", "crab", "crab apple", "cranberries", "crayfish", "cream", "cream cheese", "crispbread", "cucumber", "cumin", "curd cheese", "currants", "curry", "damson", "dark chocolate", "dates", "dates", "dates", "delicata squash", "dill", "dogfish", "dorade", "egg", "egg noodles",  "eggplant", "elderberries", "endive", "extravirgin olive oil", "fava beans", "fava beans", "fennel", "fig", "fish oil", "fish sauce",  "flounder", "french fries", "fuji apple", "full cream milk",  "full-fat margarine", "garlic", "gelatin", "gem squash", "ginger", "gnocchi", "goji berries", "gooseberries", "granulated sugar", "grapefruit", "grapes", "green asparagus", "green beans", "green beans", "green bell pepper", "green lentils", "green olives", "green onion", "grouper", "habanero", "haddock", "hake", "half-fat margarine",  "halibut", "ham", "hazelnuts", "herbs", "herring", "honey", "honeyberries", "honeydew", "horseradish", "hot dog", "hubbard squash", "ice","iceberg lettuce", "icing sugar", "jabuticabas", "jalapeno",  "jambul", "japanese plum", "jerusalem artichoke", "john dory", "jostaberries", "juniper berries", "kalamata olives", "kale", "kale", "ketchup", "kidney beans", "kidney beans", "kiwi", "kohlrabi","kumquat", "lamb", "lamb's lettuce", "langostino", "lasagna noodles", "leek", "lemon", "lemon balm", "lemon grass", "lemon juice","lemon zest", "lentils", "lentils", "lentils", "lettuce", "lime", "lingcod", "linguine", "linseed", "liquor", "low-fat curd cheese", "lupin flour", "macadamia nuts", "mackerel", "mahi mahi", "mandarine", "mango", "marionberries", "marjoram", "mayonnaise", "melon",  "milk", "milk chocolade", "millet", "mineral water", "mint", "miracle fruit", "mixed salad", "monkfish", "morel mushrooms",  "mozzarella", "mulberries", "mullet", "mung beans", "mung beans", "mushrooms", "mushrooms", "mussels", "mustard", "mustard leaves", "mustard seeds", "navy beans", "navy beans", "nectarine", "nutmeg", "oats", "oats drink", "okra", "olive oil", "olives", "onion", "onion powder", "orange", "orange juice", "orange peel",  "orange roughy", "oregano", "oregano", "oysters", "palm fruit",  "palm kernel oil", "palm oil", "panko", "papaya", "paprika",   "paris market carrot", "parmesan", "parsley", "passion fruit", "pasta", "pastry", "patagonian toothfish", "pea veggie burger", "peach", "peach", "peanut butter", "peanuts", "pear", "pearl barley",  "peas", "peas", "peas", "peas", "pecans", "pepper", "peppermint",  "perch", "philadelphia cream cheese", "pike", "pine nuts", "pineapple", "pineapple", "pineberries", "pinto beans", "pinto beans", "pistachios", "plum", "pollock", "pomfret", "pompano", "poppy seed", "porcini mushrooms", "pork", "portobello mushrooms", "potato", "potato", "potato",  "potato starch", "prawns", "puff pastry", "pumpkin", "quinoa",  "radish", "rape oil", "raspberries", "raspberries", "red bell pepper", "red cabbage", "red cabbage", "red chilli", "red meat", "red onion",  "red wine", "redcurrants", "rice", "ricotta", "rosemary", "runner beans",  "runner beans", "russet  potato", "russet  potato", "russet  potato", "rye", "rye", "rye", "saffron", "sage", "salal berries", "salmon",  "salmonberries", "salt", "sanddab", "sardine", "sausage", "savoy", "scallion", "scallops", "scampi", "schmand", "sea bass", "sea salt",  "sesame", "sesame oil", "shad", "shallot", "shiitake mushrooms", "shrimps", "skate", "skimmed milk", "sole", "sour cream", "soy curd",  "soy sauce", "soy veggie burger", "soybean drink", "soybean oil", "soybeans", "soybeans", "soybeans", "spaghetti squash", "spearmint",  "spelt drink", "spices", "spinach", "split peas", "split peas", "split peas", "sprat", "spring onion", "strawberries", "strawberries", "sturgeon", "sugar", "sugar snap peas", "sugar snap peas", "sugar snap peas", "sunflower oil", "sunflower seeds", "sunflower seeds", "surinam cherries","sweet potato", "sweet sorghum grain", "sweet sorghum stem",  "sweetcorn", "swordfish", "tabasco sauce", "tangerine", "tap water", "tarragon", "tawny port", "tea", "tempeh", "thuringian sausage", "thyme", "tilapia", "tilefish", "toast", "tofu", "tomato", "tomato", "tomatoes paste", "trout", "tuna", "turbot", "turmeric", "vanilin",  "vanilla", "vanilla extract", "vegan sausage", "vegan spreadable fat", "vegetable stock", "veggie nugget", "veggie patty", "venison", "walnuts", "wasabi", "watermelon", "wheat berries", "wheat bread", "wheat bread bun", "whey", "whipping cream", "white asparagus",  "white cabbage", "white chocolate", "white currants", "white radish", "white wine", "white wine vinegar", "whitebait", "whitefish",  "whiting", "wholegrain bread", "wholegrain bread bun", "wholegrain toast", "wholewheat flour", "wholewheat noodles", "wild mushrooms", "wild rice", "wine", "yeast", "yeast extract", "yellow bell pepper", "yogurt", "zucchini"), 
+                                                               choices = unique(c("ingredient", "ackee", "acorn squash", "agave syrup", "all-purpose flour", "almond drink", "almonds", "anchovy", "anise", "apple", "apple juice", "apple vinegar", "apricot", "apricot", "artichoke", "arugula",  "avocado", "baby carrot", "baby corn", "baby peas", "baby spinach",  "bacon", "baking powder", "baking soda", "balsamic vinegar",  "banana", "banana squash", "barley", "barley", "barley", "barracuda",  "basa", "basil", "basil", "basmati rice", "bass", "bay leaves",  "bbq sauce", "beans", "beans", "beans", "beef", "beef broth", "beef cold cuts", "beef mince", "beer", "beetroot", "beetroot", "bell pepper", "bibb lettuce", "bitter melon", "black beans", "black beans", "black cod", "black-eyed beans", "blackberries", "blackcurrants", "blood orange", "blowfish", "blueberries", "blueberries",  "bluefish", "bok choy", "bombay duck", "borlotti beans", "borlotti beans", "boysenberries", "brandy", "bread baguette", "bream", "brill",  "broad beans", "broad beans", "broccoli", "brown lentils", "brown rice", "brown sugar", "brussel sprouts", "brussel sprouts", "bulgur", "burger bun", "butter", "butter fish", "buttermilk", "butternut squash", "cantaloupe", "caraway", "cardamom", "carrot", "cashew nuts", "catfish", "catnip", "cauliflower", "celeriac", "celery", "cheddar cheese", "cheese", "cheese emmentaler", "cherries", "cherry tomatoes", "chervil", "chestnuts", "chia seeds", "chicken", "chicken broth", "chicken cold cuts", "chicken nuggets", "chickpeas", "chickpeas", "chicory", "chili", "chives", "cilantro", "cinnamon", "clams",  "clementine", "cloudberries", "clove", "cockles", "cocoa beans", "cocoa powder", "coconut", "coconut milk", "coconut oil", "cod", "coffee", "coffee beans", "coffee powder", "cognac", "collard green", "corn", "corn", "corn", "corn", "corn kernel", "corn kernel", "corn kernel", "cornstarch", "cottonseed oil", "couscous", "crab", "crab apple", "cranberries", "crayfish", "cream", "cream cheese", "crispbread", "cucumber", "cumin", "curd cheese", "currants", "curry", "damson", "dark chocolate", "dates", "dates", "dates", "delicata squash", "dill", "dogfish", "dorade", "egg", "egg noodles",  "eggplant", "elderberries", "endive", "extravirgin olive oil", "fava beans", "fava beans", "fennel", "fig", "fish oil", "fish sauce",  "flounder", "french fries", "fuji apple", "full cream milk",  "full-fat margarine", "garlic", "gelatin", "gem squash", "ginger", "gnocchi", "goji berries", "gooseberries", "granulated sugar", "grapefruit", "grapes", "green asparagus", "green beans", "green beans", "green bell pepper", "green lentils", "green olives", "green onion", "grouper", "habanero", "haddock", "hake", "half-fat margarine",  "halibut", "ham", "hazelnuts", "herbs", "herring", "honey", "honeyberries", "honeydew", "horseradish", "hot dog", "hubbard squash", "ice","iceberg lettuce", "icing sugar", "jabuticabas", "jalapeno",  "jambul", "japanese plum", "jerusalem artichoke", "john dory", "jostaberries", "juniper berries", "kalamata olives", "kale", "kale", "ketchup", "kidney beans", "kidney beans", "kiwi", "kohlrabi","kumquat", "lamb", "lamb's lettuce", "langostino", "lasagna noodles", "leek", "lemon", "lemon balm", "lemon grass", "lemon juice","lemon zest", "lentils", "lentils", "lentils", "lettuce", "lime", "lingcod", "linguine", "linseed", "liquor", "low-fat curd cheese", "lupin flour", "macadamia nuts", "mackerel", "mahi mahi", "mandarine", "mango", "marionberries", "marjoram", "mayonnaise", "melon",  "milk", "milk chocolade", "millet", "mineral water", "mint", "miracle fruit", "mixed salad", "monkfish", "morel mushrooms",  "mozzarella", "mulberries", "mullet", "mung beans", "mung beans", "mushrooms", "mushrooms", "mussels", "mustard", "mustard leaves", "mustard seeds", "navy beans", "navy beans", "nectarine", "nutmeg", "oats", "oats drink", "okra", "olive oil", "olives", "onion", "onion powder", "orange", "orange juice", "orange peel",  "orange roughy", "oregano", "oregano", "oysters", "palm fruit",  "palm kernel oil", "palm oil", "panko", "papaya", "paprika",   "paris market carrot", "parmesan", "parsley", "passion fruit", "pasta", "pastry", "patagonian toothfish", "pea veggie burger", "peach", "peach", "peanut butter", "peanuts", "pear", "pearl barley",  "peas", "peas", "peas", "peas", "pecans", "pepper", "peppermint",  "perch", "philadelphia cream cheese", "pike", "pine nuts", "pineapple", "pineapple", "pineberries", "pinto beans", "pinto beans", "pistachios", "plum", "pollock", "pomfret", "pompano", "poppy seed", "porcini mushrooms", "pork", "portobello mushrooms", "potato", "potato", "potato",  "potato starch", "prawns", "puff pastry", "pumpkin", "quinoa",  "radish", "rape oil", "raspberries", "raspberries", "red bell pepper", "red cabbage", "red cabbage", "red chilli", "red meat", "red onion",  "red wine", "redcurrants", "rice", "ricotta", "rosemary", "runner beans",  "runner beans", "russet  potato", "russet  potato", "russet  potato", "rye", "rye", "rye", "saffron", "sage", "salal berries", "salmon",  "salmonberries", "salt", "sanddab", "sardine", "sausage", "savoy", "scallion", "scallops", "scampi", "schmand", "sea bass", "sea salt",  "sesame", "sesame oil", "shad", "shallot", "shiitake mushrooms", "shrimps", "skate", "skimmed milk", "sole", "sour cream", "soy curd",  "soy sauce", "soy veggie burger", "soybean drink", "soybean oil", "soybeans", "soybeans", "soybeans", "spaghetti squash", "spearmint",  "spelt drink", "spices", "spinach", "split peas", "split peas", "split peas", "sprat", "spring onion", "strawberries", "strawberries", "sturgeon", "sugar", "sugar snap peas", "sugar snap peas", "sugar snap peas", "sunflower oil", "sunflower seeds", "sunflower seeds", "surinam cherries","sweet potato", "sweet sorghum grain", "sweet sorghum stem",  "sweetcorn", "swordfish", "tabasco sauce", "tangerine", "tap water", "tarragon", "tawny port", "tea", "tempeh", "thuringian sausage", "thyme", "tilapia", "tilefish", "toast", "tofu", "tomato", "tomato", "tomatoes paste", "trout", "tuna", "turbot", "turmeric", "vanilin",  "vanilla", "vanilla extract", "vegan sausage", "vegan spreadable fat", "vegetable stock", "veggie nugget", "veggie patty", "venison", "walnuts", "wasabi", "watermelon", "wheat berries", "wheat bread", "wheat bread bun", "whey", "whipping cream", "white asparagus",  "white cabbage", "white chocolate", "white currants", "white radish", "white wine", "white wine vinegar", "whitebait", "whitefish",  "whiting", "wholegrain bread", "wholegrain bread bun", "wholegrain toast", "wholewheat flour", "wholewheat noodles", "wild mushrooms", "wild rice", "wine", "yeast", "yeast extract", "yellow bell pepper", "yogurt", "zucchini")),
                                                                selected = NULL, 
-                                                               options = list(`live-search` = TRUE)),
-                                                   
-                                                   pickerInput(inputId = "varietyR", 
-                                                               label = "Variety", 
-                                                               choices = c("canned","frozen", "fresh", "dry", "glass"), 
-                                                               selected = NULL, 
-                                                               options = list(`live-search` = TRUE)),
-                                                   
-                                                   pickerInput(inputId = "certificationR", 
-                                                               label = "Certification", 
-                                                               choices = c("organic","conventional", 
-                                                                           "swiss integrated production"), 
-                                                               selected = "choose", 
                                                                options = list(`live-search` = TRUE))),
+                                                   
+                                                   
                                                    
                                                    #placeholder for CO2 score
                                                    div(tableOutput("tableL"),
-                                                      style = "font-size:40%" )
+                                                      style = "font-size:30%" )
                                                    
                                                  
                                                  #placeholder for relative CO2 score
@@ -381,15 +403,17 @@ ui <- fluidPage(
                                                  h2("Did you know that...",
                                                     style="padding-top:50px;"
                                                  ),
-                                                 h4("...the ingredients with less emissions are", 
+                                                 h4("...the ingredients with the least emissions are", 
                                                     align ="center",
                                                     style ="padding-top:40px;"),
                                                  h4(em("1) Sweet sorghum stem, with 0.0327 C02 Kg emissions per Kg 
                                                        of ingredient"), 
                                                     br(), 
+                                                    br(),
                                                     em("2) Russet potatoes, with 0.0888 CO2 Kg emissions per Kg 
                                                        of ingredient"), 
-                                                    br(), 
+                                                    br(),
+                                                    br(),
                                                     em("3) Paris market carrots, with 0.192 CO2 Kg emissions per Kg 
                                                        of ingredient"), 
                                                     align ="center",
@@ -399,9 +423,11 @@ ui <- fluidPage(
                                                     align="center"),
                                                  h4(em("1) Cocoa beans, with 19.7 C02 Kg emissions per Kg of ingredient"),
                                                     br(), 
+                                                    br(),
                                                     em("2) Cheddar cheese, with 15.15499 CO2 Kg emissions per Kg 
                                                              of ingredient"), 
                                                     br(), 
+                                                    br(),
                                                     em("3) Beef, with 14.9 CO2 Kg emissions per Kg of ingredient"), 
                                                     align ="center",
                                                     style ="padding-top:10px; padding-bottom:10px; padding-left:10px;
@@ -473,7 +499,10 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
   
   #co2 score from ingredients input
   observeEvent(input$btn2, {
-    
+    #Text
+    output$ingredout1 <- renderText({
+      paste("Your CO2 score is:")
+    })
     #connection to the backend
     output$ingredout <- renderText({ 
       base = paste0("http://", e,":", p,"/")
@@ -495,7 +524,7 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
                                 ), 
                      verbose()
       )
-      paste("Your CO2 score is:",fromJSON(content(r, "text")))
+      paste(fromJSON(content(r, "text")))
           
     })
     
@@ -505,13 +534,17 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
     
 #co2 score from url input on recommendations page
   observeEvent(input$btnR, {
+    #Text
+    output$urlout1 <- renderText({
+      paste("Your CO2 score is:")
+    })
     output$urlout <- renderText({
      base = paste0("http://", e,":", p,"/")
      r <- httr::GET(url=base,
                     path="get_score",
                     query=list(foodlink=input$urlin), verbose()
                     )
-     paste("Your CO2 score is:",fromJSON(content(r, "text")))
+     paste(fromJSON(content(r, "text")))
    }) 
    })
   
@@ -550,5 +583,5 @@ observeEvent(input$textinR, {
 shinyApp(ui = ui, server = server)
 
 ################################################
+  
 }
-
