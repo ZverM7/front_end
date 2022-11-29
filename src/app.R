@@ -427,7 +427,8 @@ ui <- fluidPage(
 # Define server logic 
 server <- function(input, output, session, e = "35.228.16.65", p="8080") {
   
-
+#######page changing buttons
+  
 #Button Homepage to calculator
   pageButtonServer("navbar", parentSession = session)
  
@@ -436,6 +437,9 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
 
 #Button Calculator to Recommendations
   pageButtonServer3("rec", parentSession = session) 
+  
+#########
+  
   
   
 #add ingredients button
@@ -464,9 +468,12 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
     )
   })
       
-  #co2 score from ingredients
+#################
+  
+  
+  #co2 score from ingredients input
   observeEvent(input$btn2, {
-
+    
     #connection to the backend
     output$ingredout <- renderText({ 
       base = paste0("http://", e,":", p,"/")
@@ -488,14 +495,15 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
                                 ), 
                      verbose()
       )
-      fromJSON(content(r, "text"))
+      paste("Your CO2 score is:",fromJSON(content(r, "text")))
+          
     })
     
     
   })
 
     
-#url 
+#co2 score from url input on recommendations page
   observeEvent(input$btnR, {
     output$urlout <- renderText({
      base = paste0("http://", e,":", p,"/")
@@ -509,7 +517,6 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
   
 
 
-
 #connection to Malensa for Recommendations
 
 observeEvent(input$add_btnR, {
@@ -518,6 +525,7 @@ observeEvent(input$add_btnR, {
     returnedText = get_recommendation(value) 
   })
 })
+
 
 #learn more page
 
