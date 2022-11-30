@@ -366,9 +366,12 @@ ui <- fluidPage(
                                                   h2("Our recommendations for you..."),
                                             
                                               # recommendations output url
-                                                  tags$style(type='text/css', '#urloutR {color: #7AA95C;font-size: 20px;}'),
-                                                  div(textOutput("urloutR"),
-                                                      style = "white-space:pre-wrap;",
+                                              tags$head(tags$style("#urloutR table {border-colour: black;  
+                                                                   color: #7AA95C; font-size: 10px;}", 
+                                                                   media="screen", type="text/css")),
+                                             
+                                                  div(tableOutput("urloutR"),
+                                                      #style = "white-space:pre-wrap;",
                                                       align= "center"),
                                                  
                                             #Button to learn more page
@@ -586,10 +589,23 @@ server <- function(input, output, session, e = "35.228.36.220", p="8080") {
 #connection to Malensa for Recommendations
 
 observeEvent(input$btnR, {
-  output$urloutR <- renderText({
-    value= input$urlinR
-    returnedText = get_recommendation(value) 
-  })
+  output$urloutR <- renderTable({
+    base = paste0("http://35.228.95.210:5000/")
+    r <- httr::GET(url=base,
+                 path="get_recommendation",
+                 query=list(url=input$urlin), verbose()
+    )
+    # r <- c(c("Apricot shortbread","https://www.food.com/recipe/apricot-shortbread-86796","0.4267"),c("Rhubarb shortbread","https://www.food.com/recipe/rhubarb-shortbread-60385","1.6733"),c("Cranberry shortbread","https://www.food.com/recipe/cranberry-shortbread-305893","0.5813"),c("Raspberry shortbread","https://www.food.com/recipe/raspberry-shortbread-80671","1.6061"),c("Almond shortbread","https://www.food.com/recipe/almond-shortbread-201417","0.2868"))
+    colnames(r)<-c('Recipe Name', 'Link', 'CO2 Score')
+    fromJSON(content(r, "text"))
+  },
+  bordered = TRUE,
+  colnames = TRUE,
+  rownames = FALSE,
+  spacing = "xs",
+  hover = TRUE,
+  width = "10%"
+  )
 })
 
 
