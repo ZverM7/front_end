@@ -365,9 +365,10 @@ ui <- fluidPage(
                                                   
                                                   h2("Our recommendations for you..."),
                                             
+                                                  
+                                            
                                               # recommendations output url
-                                              tags$head(tags$style("#urloutR table {border-colour: black;  
-                                                                   color: #7AA95C; font-size: 10px;}", 
+                                              tags$head(tags$style("#urloutR table {border-colour: black; font-size: 10px; colour: black}", 
                                                                    media="screen", type="text/css")),
                                              
                                                   div(tableOutput("urloutR"),
@@ -589,22 +590,24 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
 #connection to Malensa for Recommendations
 
 observeEvent(input$btnR, {
+  
   output$urloutR <- renderTable({
     base = paste0("http://34.88.16.242:5000/")
     r <- httr::GET(url=base,
                  path="get_recommendation",
                  query=list(url=input$urlin), verbose()
     )
-    # r <- c(c("Apricot shortbread","https://www.food.com/recipe/apricot-shortbread-86796","0.4267"),c("Rhubarb shortbread","https://www.food.com/recipe/rhubarb-shortbread-60385","1.6733"),c("Cranberry shortbread","https://www.food.com/recipe/cranberry-shortbread-305893","0.5813"),c("Raspberry shortbread","https://www.food.com/recipe/raspberry-shortbread-80671","1.6061"),c("Almond shortbread","https://www.food.com/recipe/almond-shortbread-201417","0.2868"))
-    colnames(r)<-c('Recipe Name', 'Link', 'CO2 Score')
+    
     fromJSON(content(r, "text"))
+    
+
   },
   bordered = TRUE,
-  colnames = TRUE,
+  colnames = FALSE,
   rownames = FALSE,
   spacing = "xs",
   hover = TRUE,
-  width = "10%"
+  width = "20%"
   )
 })
 
@@ -631,7 +634,6 @@ observeEvent(input$textinR, {
 
 # Run the application 
 shinyApp(ui = ui, server = server)
-
-################################################
+#################################################
   
 }
