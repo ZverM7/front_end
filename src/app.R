@@ -260,7 +260,7 @@ ui <- fluidPage(
                                                                background-size: auto 100%;
                                                                background-position: center center;
                                                                background-repeat: no-repeat;
-                                                               line-height: 3.8;
+                                                               line-height: 4.8;
                                                                margin: 20px;}'),
                                                     div(textOutput("ingredout"),
                                                                style= "padding-left:15%; 
@@ -339,7 +339,7 @@ ui <- fluidPage(
                                                                background-size: auto 100%;
                                                                background-position: center center;
                                                                background-repeat: no-repeat;
-                                                               line-height: 3.8;
+                                                               line-height: 4.8;
                                                                margin: 20px;}'),
                                                    div(textOutput("urlout"),
                                                        style = "padding-left:15%; 
