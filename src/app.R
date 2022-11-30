@@ -36,7 +36,7 @@ library(data.table)
 library(readr)
 
 
-############Functions#########################################################
+############ Functions #########################################################
 
 #action button to change the page homepage
 pageButtonUi <- function(id) {
@@ -116,15 +116,16 @@ ui <- fluidPage(
   #navigation tabs: create the tabs and define the theme with css file
                       navbarPage(
                                   title = div(img(src="https://github.com/ZverM7/front_end/blob/main/www/logo.png?raw=true", 
-                                              width= "35%",
+                                              width= "35%"), 
                                               #height= '70px', 
-                                              style="padding-left:5px; padding-right:100px; padding-top:10px")), 
+                                              style="padding-left:5px;padding-top:10px; padding-right:100px"), 
                                         # picture has to go in www folder
                                   id = "navbar",
                                   selected = "Home",
                                   position = "static-top",
                                   theme = "styles.css",
                                   fluid = T,
+                                
                       #Home page              ##############################################################           
                               tabPanel("Home",
                                       fixedRow(
@@ -246,22 +247,33 @@ ui <- fluidPage(
                                                         align = "right"),
                                                     
                                                     #your score is output 
-                                                    tags$style(type='text/css', '#ingredout1 {color:#7AA95C;}'),
+                                                    tags$style(type='text/css', '#ingredout1 {color:#7AA95C; font-size: 20px;}'),
                                                     div(textOutput("ingredout1"),
                                                                 style= "padding-left:15%; 
-                                                                        padding-right:15%;",
+                                                                        padding-right:15%;
+                                                                        padding-top:5px;",
                                                                 align= "center"),
                                                     
                                                     #Score output
-                                                    tags$style(type='text/css', '#ingredout {color:#7AA95C;
-                                                               background-image: url(https://github.com/ZverM7/front_end/blob/main/www/cloud.jpg?raw=true);
-                                                               background-size:cover; height: 20%}'),
+                                                    tags$style(type='text/css', '#ingredout {color:#7AA95C; font-size: 20px;
+                                                               background-image: url(https://github.com/ZverM7/front_end/blob/main/www/cloud1.jpeg?raw=true);
+                                                               background-size: auto 100%;
+                                                               background-position: center center;
+                                                               background-repeat: no-repeat;
+                                                               line-height: 3.8;
+                                                               margin: 20px;}'),
                                                     div(textOutput("ingredout"),
                                                                style= "padding-left:15%; 
-                                                                        padding-right:15%; 
-                                                                        padding-top: 10%;
-                                                                        padding-bottom: 20%;",
-                                                              align= "center")
+                                                                      padding-right:15%;
+                                                                      vertical-align: middle;",
+                                                              align= "center"),
+                                                    
+                                                    #CO2 score explanation
+                                                    tags$style(type='text/css', '#ingredout2 {color:#7AA95C; font-size: 10px;}'),
+                                                    div(textOutput("ingredout2"),
+                                                        style= "
+                                                                padding-top:5px;",
+                                                        align= "center"),
                                                     
                                              ),
                                              
@@ -313,7 +325,7 @@ ui <- fluidPage(
                                                       ),
                                                 
                                                 #Text output  
-                                                  tags$style(type='text/css', '#urlout1 {color: #7AA95C;}'),
+                                                  tags$style(type='text/css', '#urlout1 {color: #7AA95C; font-size: 20px;}'),
                                                   div(textOutput("urlout1"),
                                                       style = "padding-left:15%; 
                                                                 padding-right:15%; 
@@ -322,16 +334,24 @@ ui <- fluidPage(
                                                       align= "center"),
                                                 
                                                 #Co2 score output url
-                                                   tags$style(type='text/css', '#urlout {color: #7AA95C;
-                                                              background-image: url(https://github.com/ZverM7/front_end/blob/main/www/cloud.jpg?raw=true);
-                                                              background-size:cover; margin-bottom: 40px;}'),
+                                                   tags$style(type='text/css', '#urlout {color: #7AA95C; font-size: 20px;
+                                                               background-image: url(https://github.com/ZverM7/front_end/blob/main/www/cloud1.jpeg?raw=true);
+                                                               background-size: auto 100%;
+                                                               background-position: center center;
+                                                               background-repeat: no-repeat;
+                                                               line-height: 3.8;
+                                                               margin: 20px;}'),
                                                    div(textOutput("urlout"),
                                                        style = "padding-left:15%; 
                                                                 padding-right:15%;
-                                                                padding-bottom:20%;
-                                                                padding-top:10%;
                                                                 vertical-align: middle;",
-                                                       align= "center")
+                                                       align= "center"),
+                                                
+                                                #CO2 score explanation  
+                                                  tags$style(type='text/css', '#urlout2 {color: #7AA95C; font-size: 10px;}'),
+                                                  div(textOutput("urlout2"),
+                                                    style = "padding-top: 5px;",
+                                                    align= "center"),
                                                   
                                                    
                                            ),
@@ -346,7 +366,7 @@ ui <- fluidPage(
                                                   h2("Our recommendations for you..."),
                                             
                                               # recommendations output url
-                                                  tags$style(type='text/css', '#urloutR {color: #7AA95C;}'),
+                                                  tags$style(type='text/css', '#urloutR {color: #7AA95C;font-size: 20px;}'),
                                                   div(textOutput("urloutR"),
                                                       style = "white-space:pre-wrap;",
                                                       align= "center"),
@@ -388,9 +408,11 @@ ui <- fluidPage(
                                                    
                                                    
                                                    
-                                                   #placeholder for CO2 score
+                                                   #Table output
+                                                   tags$head(tags$style("#tableL table {background-color: White; border-colour: black}", 
+                                                                      media="screen", type="text/css")),
                                                    div(tableOutput("tableL"),
-                                                      style = "font-size:30%" )
+                                                      style = "font-size:40%" )
                                                    
                                                  
                                                  #placeholder for relative CO2 score
@@ -417,7 +439,8 @@ ui <- fluidPage(
                                                     em("3) Paris market carrots, with 0.192 CO2 Kg emissions per Kg 
                                                        of ingredient"), 
                                                     align ="center",
-                                                    style ="padding-top:10px; padding-bottom:10px; padding-left:10px;
+                                                    style ="font-size:15px; line-height: 1.2;
+                                                    padding-top:10px; padding-bottom:10px; padding-left:10px;
                                                     padding-right:10px; border-style:solid; border-color:#7AA95C;"),
                                                  h4("...the ingredients with more emissions are",  
                                                     align="center"),
@@ -430,7 +453,8 @@ ui <- fluidPage(
                                                     br(),
                                                     em("3) Beef, with 14.9 CO2 Kg emissions per Kg of ingredient"), 
                                                     align ="center",
-                                                    style ="padding-top:10px; padding-bottom:10px; padding-left:10px;
+                                                    style ="font-size:15px; line-height: 1.2; 
+                                                    padding-top:10px; padding-bottom:10px; padding-left:10px;
                                                     padding-right:10px; border-style:solid; border-color:#7AA95C;"),
                         
                                            ),
@@ -451,7 +475,7 @@ ui <- fluidPage(
 #source_python("get_recommendation_connect.py")
 
 # Define server logic 
-server <- function(input, output, session, e = "35.228.16.65", p="8080") {
+server <- function(input, output, session, e = "35.228.36.220", p="8080") {
   
 #######page changing buttons
   
@@ -525,9 +549,14 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
                      verbose()
       )
       paste(fromJSON(content(r, "text")))
+      
+    
           
     })
-    
+    #CO2 score explanation
+    output$ingredout2 <- renderText({
+      paste("* The CO2 score is the amount (kg) of CO2 emitted per kg of the ingredients.")
+    })
     
   })
 
@@ -546,13 +575,17 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
                     )
      paste(fromJSON(content(r, "text")))
    }) 
-   })
+    #CO2 score explanation
+    output$urlout2 <- renderText({
+      paste("* The CO2 score is the amount (kg) of CO2 emitted per kg of the ingredients.")
+    })
+  })
   
 
 
 #connection to Malensa for Recommendations
 
-observeEvent(input$add_btnR, {
+observeEvent(input$btnR, {
   output$urloutR <- renderText({
     value= input$urlinR
     returnedText = get_recommendation(value) 
@@ -573,6 +606,7 @@ observeEvent(input$textinR, {
   },
   bordered = TRUE,
   spacing = "xs",
+  hover = TRUE,
   width = "10%"
   ) 
 })
