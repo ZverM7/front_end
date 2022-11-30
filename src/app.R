@@ -548,9 +548,9 @@ server <- function(input, output, session, e = "34.88.165.101", p="8080") {
       r <- httr::GET(url=base,
                      path="get_score_manual",
                      query=list(list_ing=input$textin,list_ing=input$textin2, list_ing=input$textin3 , list_ing=input$textin4, 
-                                list_ing=input$textin5,list_ing=input$textin5, list_ing=input$textin6, list_ing=input$textin7,
-                                list_ing=input$textin8, list_ing=input$textin9, list_ing=input$textin10, list_ing=input$textin11, 
-                                list_ing=input$textin12, list_ing=input$textin13, list_ing=input$textin14, list_ing=input$textin15,
+                                list_ing=input$textin5, list_ing=input$textin6, list_ing=input$textin7, list_ing=input$textin8, 
+                                list_ing=input$textin9, list_ing=input$textin10, list_ing=input$textin11, list_ing=input$textin12, 
+                                list_ing=input$textin13, list_ing=input$textin14, list_ing=input$textin15,
                                 list_quant=input$quantityin, list_quant=input$quantityin2, list_quant=input$quantityin3, 
                                 list_quant=input$quantityin4, list_quant=input$quantityin5, list_quant=input$quantityin6,
                                 list_quant=input$quantityin7, list_quant=input$quantityin8, list_quant=input$quantityin9, 
@@ -560,7 +560,7 @@ server <- function(input, output, session, e = "34.88.165.101", p="8080") {
                                 list_meas=input$unitin5, list_meas=input$unitin6, list_meas=input$unitin7, list_meas=input$unitin8,
                                 list_meas=input$unitin9, list_meas=input$unitin10, list_meas=input$unitin11, list_meas=input$unitin12,
                                 list_meas=input$unitin13, list_meas=input$unitin14, list_meas=input$unitin15
-                                ), 
+                                ),  
                      verbose()
       )
       paste(fromJSON(content(r, "text")))
