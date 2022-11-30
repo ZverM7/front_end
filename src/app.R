@@ -418,7 +418,7 @@ ui <- fluidPage(
                                                    
                                                    
                                                    #Table output
-                                                 tags$head(tags$style("#tableL tr:first-child td {border-color: transparent; 
+                                                 tags$head(tags$style("#tableL th {border-color: transparent; 
                                                                   font-size: 13px; font-weight: bold; background-color: #7AA95C; color: white; }", 
                                                                       media="screen", type="text/css")),
                                                  tags$head(tags$style("#tableL table {border-color: transparant; border-radius: 8px; 
