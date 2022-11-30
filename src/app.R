@@ -485,11 +485,12 @@ ui <- fluidPage(
   
             
 
+
 #############SERVER##########################################################
 #source_python("get_recommendation_connect.py")
 
 # Define server logic 
-server <- function(input, output, session, e = "35.228.16.65", p="8080") {
+server <- function(input, output, session, e = "34.88.165.101", p="8080") {
   
 #######page changing buttons
   
@@ -602,7 +603,7 @@ server <- function(input, output, session, e = "35.228.16.65", p="8080") {
 observeEvent(input$btnR, {
   
   output$urloutR <- renderTable({
-    base = paste0("http://34.88.16.242:5000/")
+    base = paste0("http://35.228.95.210:5000/")
     r <- httr::GET(url=base,
                  path="get_recommendation",
                  query=list(url=input$urlin), verbose()
