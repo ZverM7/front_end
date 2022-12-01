@@ -490,7 +490,7 @@ ui <- fluidPage(
 #source_python("get_recommendation_connect.py")
 
 # Define server logic 
-server <- function(input, output, session, e = "34.88.165.101", p="8080") {
+server <- function(input, output, session, e = "35.228.36.220", p="8080") {
   
 #######page changing buttons
   
